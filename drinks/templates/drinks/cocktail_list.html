@@ -1,3 +1,8 @@
 <h1>Cocktails</h1>
 <p><a href="{% url 'drinks:home' %}">Go to homepage</a></p>
-{{Cocktails}}
+
+<ul>
+{% for cocktail in cocktail_list %}
+ <li>{{cocktail}}</li>
+{% endfor %}
+</ul>
