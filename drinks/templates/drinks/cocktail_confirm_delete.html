@@ -1,0 +1,5 @@
+<h3>Are you shure you want to delete "{{ object.name }}"?</h3>
+<form method="POST">{% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Confirm">
+</form>

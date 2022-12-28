@@ -3,6 +3,6 @@
 
 <ul>
 {% for cocktail in cocktail_list %}
- <li>{{cocktail}}</li>
+ <li>{{cocktail}} <a href='/drinks/remove_cocktail/{{cocktail.id}}'>delete</a></li>
 {% endfor %}
 </ul>
