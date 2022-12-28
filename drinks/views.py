@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, CreateView
 from .models import Cocktail
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -10,4 +11,9 @@ class HomeView(TemplateView):
 
 class DrinksList(ListView):
     model = Cocktail
-    
+
+
+class DrinksCreate(CreateView):
+    model = Cocktail
+    fields = '__all__'
+    success_url = reverse_lazy('drinks:cocktail_list')
