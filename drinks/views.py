@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, CreateView, DeleteView
+from django.views.generic import (TemplateView, ListView, 
+                                CreateView, DeleteView,
+                                DetailView)
 from .models import Cocktail
 from django.urls import reverse_lazy
 
@@ -23,3 +25,6 @@ class DrinksDelete(DeleteView):
     model = Cocktail
     success_url = reverse_lazy('drinks:cocktail_list')
 
+
+class DrinksDetails(DetailView):
+    model = Cocktail

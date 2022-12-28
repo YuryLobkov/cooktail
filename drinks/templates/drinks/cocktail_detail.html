@@ -1,0 +1,7 @@
+<h2>Details for {{ cocktail.name }}</h2>
+<p>
+    Drink type: {{cocktail.group}} <br>
+    Volume: {{cocktail.volume}} %
+</p>
+<br>
+<a href="{% url 'drinks:cocktail_list' %}">Go back</a>
