@@ -16,6 +16,12 @@
         {% endfor %}
     </ul>
     <!--endif-->
+    Requiered tools:
+    <ul>
+        {% for tool in cocktail.tools.all %}
+        <li>{{tool}}</li>
+        {% endfor %}
+    </ul>
 </div>
 
 <br>

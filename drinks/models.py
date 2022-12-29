@@ -34,6 +34,10 @@ class Inventory(models.Model):
     )
 
 
+    def __str__(self):
+        return self.name
+
+
 class Cocktail(models.Model):
     #id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     name = models.CharField(max_length=30, unique=True)
