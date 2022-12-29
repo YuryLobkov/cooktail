@@ -1,0 +1,14 @@
+<h1>Ingredient list</h1>
+<p><a href="{% url 'drinks:home' %}">Go to homepage</a></p>
+
+<table>
+    
+        {% for ingredient in ingredients_list %}
+        <tr>
+            <td><!--<a href='/drinks/cocktail/{{cocktail.id}}'>-->{{ingredient.name}} <!--</a>--></td>
+            <td><p>&nbsp;</p></td>
+            <!--<td><a href='/drinks/remove_cocktail/{{cocktail.id}}'>delete</a></td>-->
+        </tr>
+        {% endfor %}
+    
+</table>
