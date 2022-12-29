@@ -23,6 +23,10 @@ class Ingredients(models.Model):
     description = models.CharField(null=True, max_length=100)
 
 
+    def __str__(self):
+        return self.name
+
+
 class Inventory(models.Model):
     name = models.CharField(max_length=30)
     inv_type = models.CharField(max_length=10, choices=
@@ -34,6 +38,8 @@ class Cocktail(models.Model):
     name = models.CharField(max_length=30)
     group = models.ForeignKey('GroupsCocktail', on_delete=models.CASCADE)
     volume = models.SmallIntegerField()
+    main_ingredients = models.ManyToManyField(Ingredients)
+
 
     def __str__(self):
         return f'{self.name},{self.group},{self.volume}%'
