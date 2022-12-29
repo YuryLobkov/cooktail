@@ -35,11 +35,14 @@ class Inventory(models.Model):
 
 
 class Cocktail(models.Model):
-    name = models.CharField(max_length=30)
+    #id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    name = models.CharField(max_length=30, unique=True)
     group = models.ForeignKey('GroupsCocktail', on_delete=models.CASCADE)
     volume = models.SmallIntegerField()
     main_ingredients = models.ManyToManyField(Ingredients, related_name='main_ingredients')
     optional_ingredients = models.ManyToManyField(Ingredients, related_name='optional_ingredients')
+    tools = models.ManyToManyField(Inventory, related_name='tools')
+    recepie = models.CharField(max_length=1000, default='Recepie here')
 
 
     def __str__(self):
