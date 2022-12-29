@@ -37,7 +37,7 @@ class IngredientsList(ListView):
 class IngredientsCreate(CreateView):
     model = Ingredients
     fields = '__all__'
-    success_url = reverse_lazy('drinks:ingredients_list')
+    success_url = reverse_lazy('drinks:ingredients')
 
 
 class InventoryList(ListView):
