@@ -1,13 +1,17 @@
 <h2>Details for {{ cocktail.name }}</h2>
 <div>
-    Drink type: {{cocktail.group}} <br>
-    Volume: {{cocktail.volume}} % <br>
-    Main ingredients:
-    <ul>
-        {% for ingredient in cocktail.main_ingredients.all %}
-        <li>{{ingredient}}</li>
-        {% endfor %}
-    </ul>
+    <div>
+        Drink type: {{cocktail.group}} <br>
+        Volume: {{cocktail.volume}} % <br>
+    </div>
+    <div>
+        Main ingredients:
+        <ul>
+            {% for ingredient in cocktail.main_ingredients.all %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+        </ul>
+    </div>
     <!--if optional ing not null-->
     Optional ingredients:
     <ul>
@@ -22,6 +26,8 @@
         <li>{{tool}}</li>
         {% endfor %}
     </ul>
+    How to make:
+    <div>{{cocktail.recepie}}</div>
 </div>
 
 <br>
