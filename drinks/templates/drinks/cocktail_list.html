@@ -1,6 +1,9 @@
 <h1>Cocktails</h1>
-<p><a href="{% url 'drinks:home' %}">Go to homepage</a></p>
-
+<div>
+<a href="{% url 'drinks:home' %}">Go to homepage</a><br>
+<a href="{% url 'drinks:add_cocktail' %}"> Add</a><br>
+</div>
+<div>
 <table>
     
         {% for cocktail in cocktail_list %}
@@ -12,3 +15,4 @@
         {% endfor %}
     
 </table>
+</div>

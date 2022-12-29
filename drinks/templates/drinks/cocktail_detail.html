@@ -1,7 +1,34 @@
 <h2>Details for {{ cocktail.name }}</h2>
-<p>
-    Drink type: {{cocktail.group}} <br>
-    Volume: {{cocktail.volume}} %
-</p>
+<div>
+    <div>
+        Drink type: {{cocktail.group}} <br>
+        Volume: {{cocktail.volume}} % <br>
+    </div>
+    <div>
+        Main ingredients:
+        <ul>
+            {% for ingredient in cocktail.main_ingredients.all %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!--if optional ing not null-->
+    Optional ingredients:
+    <ul>
+        {% for opt_ingredient in cocktail.optional_ingredients.all %}
+        <li>{{opt_ingredient}}</li>
+        {% endfor %}
+    </ul>
+    <!--endif-->
+    Requiered tools:
+    <ul>
+        {% for tool in cocktail.tools.all %}
+        <li>{{tool}}</li>
+        {% endfor %}
+    </ul>
+    How to make:
+    <div>{{cocktail.recepie}}</div>
+</div>
+
 <br>
 <a href="{% url 'drinks:cocktail_list' %}">Go back</a>

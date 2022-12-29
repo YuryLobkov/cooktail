@@ -1,0 +1,5 @@
+<h1>Add new tools and tableware to the list</h1>
+<form method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create">
+</form>
