@@ -10,6 +10,26 @@ class GroupsCocktail(models.Model):
         return f'{self.group_name}'
 
 
+class Ingredients(models.Model):
+    class IngTypes(models.TextChoices):
+        alc = 'Alc', 'Alcohol'
+        soft = 'Sof', 'Soft-drinks'
+        garn = 'Gar', 'Garnish'
+        other = 'Oth', 'Other'
+
+
+    name = models.CharField(max_length=30)
+    ing_type = models.CharField(max_length=11, choices=IngTypes.choices, default=IngTypes.other)
+    description = models.CharField(null=True, max_length=100)
+
+
+class Inventory(models.Model):
+    name = models.CharField(max_length=30)
+    inv_type = models.CharField(max_length=10, choices=
+    (('tableware','Tableware'), ('instrument','Instrument'), ('other','Other'))
+    )
+
+
 class Cocktail(models.Model):
     name = models.CharField(max_length=30)
     group = models.ForeignKey('GroupsCocktail', on_delete=models.CASCADE)
