@@ -8,6 +8,14 @@
         <li>{{ingredient}}</li>
         {% endfor %}
     </ul>
+    <!--if optional ing not null-->
+    Optional ingredients:
+    <ul>
+        {% for opt_ingredient in cocktail.optional_ingredients.all %}
+        <li>{{opt_ingredient}}</li>
+        {% endfor %}
+    </ul>
+    <!--endif-->
 </div>
 
 <br>

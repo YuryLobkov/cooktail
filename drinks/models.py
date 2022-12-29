@@ -38,7 +38,8 @@ class Cocktail(models.Model):
     name = models.CharField(max_length=30)
     group = models.ForeignKey('GroupsCocktail', on_delete=models.CASCADE)
     volume = models.SmallIntegerField()
-    main_ingredients = models.ManyToManyField(Ingredients)
+    main_ingredients = models.ManyToManyField(Ingredients, related_name='main_ingredients')
+    optional_ingredients = models.ManyToManyField(Ingredients, related_name='optional_ingredients')
 
 
     def __str__(self):
