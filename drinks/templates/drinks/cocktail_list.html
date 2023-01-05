@@ -20,7 +20,8 @@
                     <p class="card-text"><small class="text-muted">
                         {% for ingredient in cocktail.main_ingredients.all %}
                             {{ingredient}}
-                        {% endfor %}
+                        {% endfor %} <br>
+                    <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
                     </small></p>
                     </div>
                 </div>
