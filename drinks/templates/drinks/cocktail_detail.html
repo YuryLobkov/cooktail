@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {%block content%}
-<h2>Details for {{ cocktail.name }}</h2>
-<div>
+<div class="container">
+    <h2>Details for {{ cocktail.name }}</h2>
     <div>
         Drink type: {{cocktail.group}} <br>
         Volume: {{cocktail.volume}} % <br>
@@ -32,8 +32,9 @@
     <div>{{cocktail.recepie}}</div>
     Image:
     <div><img src="{{ cocktail.image.url }}" alt="img should be here"></div>
+    <br>
+    <a href="{% url 'drinks:cocktail_list' %}">Go back</a>
 </div>
 
-<br>
-<a href="{% url 'drinks:cocktail_list' %}">Go back</a>
+
 {%endblock%}
