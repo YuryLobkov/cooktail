@@ -1,9 +1,16 @@
-<h1>Create new mix!</h1>
-<div>
-<a href="{% url 'drinks:add_ingredient' %}">Add ingredients</a>
-<a href="{% url 'drinks:add_inventory' %}">Add inventory</a>
+{% extends 'base.html' %}
+{%block content%}
+<div class="container">
+    <h1>Create new mix!</h1>
+    <div>
+        <a href="{% url 'drinks:add_ingredient' %}">Add ingredients</a>
+        <a href="{% url 'drinks:add_inventory' %}">Add inventory</a>
+    </div>
+    <form method="POST"> {% csrf_token %}
+        <table>
+            {{ form.as_table}}
+        </table>
+        <input type="submit" value="Create">
+    </form>
 </div>
-<form method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Create">
-</form>
+{%endblock%}

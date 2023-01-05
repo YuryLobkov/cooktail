@@ -1,18 +1,22 @@
-<h1>Cocktails</h1>
-<div>
-<a href="{% url 'drinks:home' %}">Go to homepage</a><br>
-<a href="{% url 'drinks:add_cocktail' %}"> Add</a><br>
+{% extends 'base.html' %}
+{%block content%}
+<div class="container">
+    <h1>Cocktails</h1>
+    <div>
+        <!-- <a href="{% url 'drinks:home' %}">Go to homepage</a><br> -->
+        <a href="{% url 'drinks:add_cocktail' %}"> Add</a><br>
+    </div>
+    <div>
+        <table>
+            
+            {% for cocktail in cocktail_list %}
+            <tr>
+                <td><a href='/drinks/cocktail/{{cocktail.id}}'>{{cocktail.name}} </a></td>
+                 <td><p>&nbsp;</p></td>
+                <td><a href='/drinks/remove_cocktail/{{cocktail.id}}'>delete</a></td>
+            </tr>
+            {% endfor %}           
+        </table>
+    </div>
 </div>
-<div>
-<table>
-    
-        {% for cocktail in cocktail_list %}
-        <tr>
-            <td><a href='/drinks/cocktail/{{cocktail.id}}'>{{cocktail.name}} </a></td>
-            <td><p>&nbsp;</p></td>
-            <td><a href='/drinks/remove_cocktail/{{cocktail.id}}'>delete</a></td>
-        </tr>
-        {% endfor %}
-    
-</table>
-</div>
+{%endblock%}
