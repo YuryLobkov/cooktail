@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{%block content%}
 <h2>Details for {{ cocktail.name }}</h2>
 <div>
     <div>
@@ -32,3 +34,4 @@
 
 <br>
 <a href="{% url 'drinks:cocktail_list' %}">Go back</a>
+{%endblock%}
