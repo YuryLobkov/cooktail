@@ -47,6 +47,7 @@ class Cocktail(models.Model):
     optional_ingredients = models.ManyToManyField(Ingredients, related_name='optional_ingredients')
     tools = models.ManyToManyField(Inventory, related_name='tools')
     recepie = models.CharField(max_length=1000, default='Recepie here')
+    image = models.ImageField(null=True, upload_to='cocktails_images', blank=True)
 
 
     def __str__(self):
