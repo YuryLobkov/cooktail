@@ -1,5 +1,5 @@
 {% extends 'forum/base.html' %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-<h1>HOME PAGE | <a href="/posts">POSTS</a></h1>
+<h1>HOME PAGE | <a href="{% url 'forum:post_list' %}">POSTS</a></h1>
 {% endblock content %}
