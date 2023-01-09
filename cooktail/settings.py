@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'forum.apps.ForumConfig',
     'drinks.apps.DrinksConfig',
     'django.contrib.admin',
     'django.contrib.auth',
