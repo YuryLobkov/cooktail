@@ -36,7 +36,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('/posts')
+            return redirect('/forum/posts')
     else:
         form = PostForm()
     return render(request, 'forum/create_post.html', {'form':form})
