@@ -22,5 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('drinks/', include('drinks.urls'), name='drinks'),
-    path('', start_redirect_view, name='start_page')
+    path('', start_redirect_view, name='start_page'),
+    path('forum/', include('forum.urls'), name='forum'),
+    path('', include('django.contrib.auth.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
