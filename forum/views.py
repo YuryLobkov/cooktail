@@ -41,24 +41,19 @@ def create_post(request):
         form = PostForm()
     return render(request, 'forum/create_post.html', {'form':form})
 
-class CreateCommentView(CreateView):
-    model = Comment
-    template_name = 'forum/create_comment.html'
-    fields = ['post','name', 'body']
-    success_url = '/forum/posts'
-
 class UpdatePostView(UpdateView):
     model = Post
     template_name = 'forum/update_post.html'
     fields = ['title', 'content']
     success_url = '/forum/posts'
-    
 
-# def update_post(request):
-#     posts = Post.objects.all()
-#     if request.method == 'POST':
-#         post_id = request.POST.get('post-id')
-#         post = Post.objects.filter(id=post_id).first()
-#         if post and post.author == request.user:
-#             post.update()
-#     return render(request, 'forum/post_list.html', {'posts':posts})
+class CreateCommentView(CreateView):
+    model = Comment
+    template_name = 'forum/create_comment.html'
+    fields = ['post','body']
+    success_url = '/forum/posts'
+
+    def form_valid(self, form):
+        form.instance.comment_author = self.request.user
+        return super().form_valid(form)
+
