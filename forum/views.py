@@ -41,6 +41,9 @@ def create_post(request):
         form = PostForm()
     return render(request, 'forum/create_post.html', {'form':form})
 
+class UpdatePostView(UpdateView):
+    
+
 # def update_post(request):
 #     posts = Post.objects.all()
 #     if request.method == 'POST':
