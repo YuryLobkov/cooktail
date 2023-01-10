@@ -42,6 +42,7 @@ def create_post(request):
     return render(request, 'forum/create_post.html', {'form':form})
 
 class UpdatePostView(UpdateView):
+    template_name = ''
     
 
 # def update_post(request):

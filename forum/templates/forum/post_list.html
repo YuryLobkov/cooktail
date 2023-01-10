@@ -25,12 +25,23 @@
     </li>
     
     <div>
-        {% if user == post.author %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="post-id" value="{{post.id}}">❌</button>
-            </form>
-        {% endif %}
+        <table>
+            <tr>
+                {% if user == post.author %}
+                    <th>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="post-id" value="{{post.id}}">❌</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="">
+                            <button type="submit">✏</button>
+                        </form>
+                    </th>                        
+                {% endif %}
+            </tr>
+        </table>
     </div>
 </ol>
 {% empty %}
