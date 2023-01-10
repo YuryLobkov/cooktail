@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PostForm
 from django.contrib.auth import login, logout, authenticate
 from .models import Post, Comment
-from django.views.generic import UpdateView, CreateView
+from django.views.generic import UpdateView, CreateView, DeleteView
 
 
 # Create your views here.
@@ -57,3 +57,8 @@ class CreateCommentView(CreateView):
         form.instance.comment_author = self.request.user
         return super().form_valid(form)
 
+class UpdateCommentView(UpdateView):
+    model = Comment
+    template_name = 'forum/update_comment.html'
+    fields = ['body']
+    success_url = '/forum/posts'
