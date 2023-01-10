@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PostForm
 from django.contrib.auth import login, logout, authenticate
-from .models import Post
+from .models import Post, Comment
 from django.views.generic import UpdateView, CreateView
 
 
@@ -42,7 +42,10 @@ def create_post(request):
     return render(request, 'forum/create_post.html', {'form':form})
 
 class CreateCommentView(CreateView):
-    pass
+    model = Comment
+    template_name = 'forum/create_comment.html'
+    fields = ['post','name', 'body']
+    success_url = '/forum/posts'
 
 class UpdatePostView(UpdateView):
     model = Post

@@ -6,9 +6,12 @@
 <a href="/forum/create-post">Create post</a>
 <br></br>
 {% for post in posts %}
-<ol>
+<ul>
     <li>
         <table>
+            <tr>
+                <th th style="border: 1px black solid;">Post:</th>
+            </tr>
             <tr>
                 <th style="border: 1px black solid;">Author</th>
                 <th style="border: 1px black solid;">Title</th>
@@ -25,8 +28,6 @@
             </tr>
         </table>
     </li>
-    
-    <div>
         <table>
             <tr>
                 {% if user == post.author %}
@@ -40,14 +41,36 @@
                         <form action="{% url 'forum:update-post' post.pk %}">
                             <button type="submit">✏</button>
                         </form>
-                    </th>                        
+                    </th>                      
                 {% endif %}
+                    <th>
+                        <form action="{% url 'forum:create-comment' post.pk %}">
+                            <button type="submit">💬</button>
+                        </form>
+                    </th>
             </tr>
         </table>
-    </div>
-</ol>
+    <li>
+        <table>
+            <tr>
+                <th style="border: 1px black solid;">Comments:</th>
+            </tr>
+            <tr>
+                <th style="border: 1px black solid;">Name</th>
+                <th style="border: 1px black solid;">Content</th>
+                <th style="border: 1px black solid;">Date</th>
+            </tr>
+            {% for comment in post.comments.all %}
+            <tr>
+                    <td style="border: 1px black solid;">{{comment.name}}</td>
+                    <td style="border: 1px black solid;">{{comment.body}}</td>
+                    <td style="border: 1px black solid;">{{comment.post_date}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </li>
+</ul>
 {% empty %}
 <p>No posts yet :(</p>
 {% endfor %}
-
 {% endblock content %}
