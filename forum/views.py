@@ -64,8 +64,7 @@ class UpdateCommentView(UpdateView):
     success_url = '/forum/posts'
 
 class PostDetailView(DetailView):
-    model = Post
+    model = Comment
     fields = ['__all__']
     template_name = 'forum/post_detail.html'
-    pass
 

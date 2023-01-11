@@ -10,7 +10,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title + '\n' + self.content
+        return self.title + '\n' + self.content + (str(self.author))
 
 class Comment(models.Model):
     comment_author = models.ForeignKey(User, on_delete=models.CASCADE)
