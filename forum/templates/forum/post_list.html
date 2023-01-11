@@ -50,6 +50,9 @@
                         </form>
                     </th>
                 {% endif %}
+                    <th>
+                        <a href="{% url 'forum:post-detail' post.pk %}">Detail</a>
+                    </th>
             </tr>
         </table>
     <li style="list-style-type: none">
