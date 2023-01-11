@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {%block content%}
-<div class="container">
-    <body>
-        <h1>Homepage</h1>
-        <ul>
-            <li><a href="{% url 'drinks:cocktail_list' %}">cocktails</a></li>
-            <li><a href="{% url 'drinks:add_cocktail' %}">create new cocktail</a></li>
-        </ul>
-    </body>
+<div class="container glass-layout">
+    <div class="centered">
+        <h1><span>Wellcome to </span><span class="logo-custom logo-green">__CookTail__</span></h1>
+        <h3>Our portal for home bartenders!</h3>
+    </div>
+    <ul>
+        <li><a href="{% url 'drinks:cocktail_list' %}">cocktails</a></li>
+        <li><a href="{% url 'drinks:add_cocktail' %}">create new cocktail</a></li>
+     </ul>
 </div>
 {%endblock%}

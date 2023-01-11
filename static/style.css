@@ -45,7 +45,7 @@ body{
     align-items:center;
 }
 
-.navbar-brand{
+.logo-custom{
     display: flex;
     font-family: Neonderthaw;
     font-size: 2em;
@@ -56,9 +56,21 @@ body{
     transition: 300ms cubic-bezier(0,2,1,-2);
 }
 
-.navbar-brand:hover{
+.logo-custom:hover{
     color: greenyellow;
     text-shadow: 2px 2px 4px rgb(247, 0, 255);
+    cursor: pointer;
+    transition: 2s;
+}
+
+.logo-green{
+    background-color: black;
+    border-radius: 20px;
+    max-width: 580px;
+}
+
+.centered{
+text-align: center;
 }
 
 .card{
