@@ -6,37 +6,6 @@
 <a href="/forum">Back to home</a>
 <a href="/forum/create-post">Create post</a>
 <br></br>
-<!-- {% for post in posts %}    
-<ol>
-    <li>
-        <table>
-            <tr>
-                <th style="border: 1px black solid;">Author</th>
-                <th style="border: 1px black solid;">Title</th>
-                <th style="border: 1px black solid;">Content</th>
-                <th style="border: 1px black solid;">Created at</th>
-            </tr>
-            <tr>
-                <td style="border: 1px black solid;">{{post.author.username}}</td>
-                <td style="border: 1px black solid;">{{post.title}}</td>
-                <td style="border: 1px black solid;">{{post.content}}</td>
-                <td style="border: 1px black solid;">{{post.created_at}}</td>
-            </tr>
-        </table>
-    </li>
-    
-    <div>
-        {% if user == post.author %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="post-id" value="{{post.id}}">❌</button>
-            </form>
-        {% endif %}
-    </div>
-</ol>
-{% empty %}
-<p>No posts yet :(</p>
-{% endfor %} -->
     {% for post in posts %}
         <div class="card border-bg-secondary mb-3" >
             <div class="card-header post-header row">
@@ -60,4 +29,5 @@
         <p>No posts yet :(</p>
     {% endfor %}
 </div>
+{% endfor %}
 {% endblock content %}

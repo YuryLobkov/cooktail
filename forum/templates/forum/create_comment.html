@@ -1,10 +1,10 @@
 {% extends 'forum/base.html' %}
-{% block title %}Update post{% endblock title %}
+{% block title %}Create comment{% endblock title %}
 {% block content %}
 <form action="" method="post">
 {% csrf_token %}
-<h1>UPDATE POST PAGE</h1>
+<h1>CREATE COMMENT PAGE</h1>
 {{form.as_p}}
-<button type="submit">Update</button>
+<button type="submit">comment</button>
 </form>
 {% endblock content %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PostForm
 from django.contrib.auth import login, logout, authenticate
-from .models import Post
-from django.views.generic import UpdateView
+from .models import Post, Comment
+from django.views.generic import UpdateView, CreateView, DeleteView
 
 
 # Create your views here.
@@ -41,11 +41,24 @@ def create_post(request):
         form = PostForm()
     return render(request, 'forum/create_post.html', {'form':form})
 
-# def update_post(request):
-#     posts = Post.objects.all()
-#     if request.method == 'POST':
-#         post_id = request.POST.get('post-id')
-#         post = Post.objects.filter(id=post_id).first()
-#         if post and post.author == request.user:
-#             post.update()
-#     return render(request, 'forum/post_list.html', {'posts':posts})
+class UpdatePostView(UpdateView):
+    model = Post
+    template_name = 'forum/update_post.html'
+    fields = ['title', 'content']
+    success_url = '/forum/posts'
+
+class CreateCommentView(CreateView):
+    model = Comment
+    template_name = 'forum/create_comment.html'
+    fields = ['post','body']
+    success_url = '/forum/posts'
+
+    def form_valid(self, form):
+        form.instance.comment_author = self.request.user
+        return super().form_valid(form)
+
+class UpdateCommentView(UpdateView):
+    model = Comment
+    template_name = 'forum/update_comment.html'
+    fields = ['body']
+    success_url = '/forum/posts'
