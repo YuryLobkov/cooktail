@@ -2,9 +2,8 @@
 {%block content%}
 <div class="container">
     <h1>Cocktails</h1>
-    <div>
-        <!-- <a href="{% url 'drinks:home' %}">Go to homepage</a><br> -->
-        <a href="{% url 'drinks:add_cocktail' %}"> Add</a><br>
+    <div class="list-menu">
+        <a class="btn btn-primary" href="{% url 'drinks:add_cocktail' %}">Add</a>
     </div>
     <div>
         {% for cocktail in cocktail_list %}
