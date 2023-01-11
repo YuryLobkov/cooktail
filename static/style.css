@@ -4,6 +4,10 @@ body{
     color: beige;
 }
 
+.container{
+    color: black;
+}
+
 .card{
     background-color: rgba(240, 248, 255, 0.685);
 }
