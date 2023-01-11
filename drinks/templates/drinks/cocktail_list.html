@@ -9,9 +9,9 @@
 <div class="container glass-layout grid-wrap">
         {% for cocktail in cocktail_list %}
             <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk">
+                <div class="row g-0 card-img-custom">
+                <div class="col-md-4 card-img-custom2">
+                    <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk" width="100%">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

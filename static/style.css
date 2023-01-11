@@ -13,8 +13,9 @@ body{
 
 .list-menu{
     margin: 10px;
-    font-family: "Bakbak one", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-family: Lobster, Arial, "Helvetica Neue", Helvetica, sans-serif;
     color: beige;
+    text-shadow: 2px 2px black;
 }
 
 .glass-layout{
@@ -28,7 +29,15 @@ body{
 .grid-wrap{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
-    justify-items:normal;
+}
+
+/* TODO move card image to the center of card (align) */
+.card-img-custom{
+    height: 100%;
+}
+
+.card-img-custom2{
+    align-items:center;
 }
 
 .navbar-brand{
