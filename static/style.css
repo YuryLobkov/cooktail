@@ -60,13 +60,13 @@ body{
     color: greenyellow;
     text-shadow: 2px 2px 4px rgb(247, 0, 255);
     cursor: pointer;
-    transition: 2s;
 }
 
 .logo-green{
     background-color: black;
     border-radius: 20px;
     max-width: 580px;
+    transition: 2s;
 }
 
 .centered{
