@@ -1,6 +1,7 @@
 body{
     background: url(background.jpg) no-repeat center center fixed;
     background-size: cover;
+    color: beige;
 }
 
 .card{
@@ -69,4 +70,8 @@ footer{
     margin-top: 30px;
     margin-bottom: 0;
     background-color: rgba(128, 128, 128, 0.349);
+}
+
+.viewport{
+    min-height: 90vh;
 }
