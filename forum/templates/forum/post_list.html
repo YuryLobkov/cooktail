@@ -1,11 +1,12 @@
 {% extends 'forum/base.html' %}
 {% block title %}Posts{% endblock title %}
 {% block content %}
+<div class="container glass-layout">
 <h1>FORUM</h1>
 <a href="/forum">Back to home</a>
 <a href="/forum/create-post">Create post</a>
 <br></br>
-{% for post in posts %}
+<!-- {% for post in posts %}    
 <ol>
     <li>
         <table>
@@ -35,6 +36,28 @@
 </ol>
 {% empty %}
 <p>No posts yet :(</p>
-{% endfor %}
-
+{% endfor %} -->
+    {% for post in posts %}
+        <div class="card border-bg-secondary mb-3" >
+            <div class="card-header post-header row">
+                <span class="col-8">{{post.author}}</span>
+                <span class="col-3">posted at {{post.created_at}}</span>
+                <span class="col-1">
+                    {% if user == post.author %}
+                        <form method="POST" class="nomargin">
+                            {% csrf_token %}
+                            <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
+                        </form>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{post.title}}</h5>
+                <p class="card-text">{{post.content}}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts yet :(</p>
+    {% endfor %}
+</div>
 {% endblock content %}

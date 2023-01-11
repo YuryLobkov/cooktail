@@ -4,6 +4,10 @@ body{
     color: beige;
 }
 
+.nomargin{
+    margin: 0;
+}
+
 .container{
     color: black;
 }
