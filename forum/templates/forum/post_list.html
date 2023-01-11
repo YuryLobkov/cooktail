@@ -10,12 +10,15 @@
         <div class="card border-bg-secondary mb-3" >
             <div class="card-header post-header row">
                 <span class="col-8">{{post.author}}</span>
-                <span class="col-3">posted at {{post.created_at}}</span>
-                <span class="col-1">
+                <span class="col-2">posted at {{post.created_at}}</span>
+                <span class="col-2">
                     {% if user == post.author %}
                         <form method="POST" class="nomargin">
                             {% csrf_token %}
                             <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
+                        </form>
+                        <form action="{% url 'forum:update-post' post.pk %}">
+                            <button class="btn btn-secondary" type="submit">Edit</button>
                         </form>
                     {% endif %}
                 </span>
@@ -29,5 +32,4 @@
         <p>No posts yet :(</p>
     {% endfor %}
 </div>
-{% endfor %}
 {% endblock content %}
