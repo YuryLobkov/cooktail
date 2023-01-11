@@ -6,35 +6,83 @@
 <a href="/forum/create-post">Create post</a>
 <br></br>
 {% for post in posts %}
-<ol>
-    <li>
+<ul>
+    <li style="list-style-type: none">
         <table>
+            <tr>
+                <th th style="border: 1px black solid;">Post:</th>
+            </tr>
             <tr>
                 <th style="border: 1px black solid;">Author</th>
                 <th style="border: 1px black solid;">Title</th>
                 <th style="border: 1px black solid;">Content</th>
                 <th style="border: 1px black solid;">Created at</th>
+                <th style="border: 1px black solid;">Updated at</th>
             </tr>
             <tr>
                 <td style="border: 1px black solid;">{{post.author.username}}</td>
                 <td style="border: 1px black solid;">{{post.title}}</td>
                 <td style="border: 1px black solid;">{{post.content}}</td>
                 <td style="border: 1px black solid;">{{post.created_at}}</td>
+                <td style="border: 1px black solid;">{{post.updated_at}}</td>
             </tr>
         </table>
-    </li>
-    
-    <div>
-        {% if user == post.author %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="post-id" value="{{post.id}}">❌</button>
-            </form>
+    </li style="list-style-type: none">
+        <table>
+            <tr>
+                {% if user == post.author %}
+                    <th>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="post-id" value="{{post.id}}">❌</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="{% url 'forum:update-post' post.pk %}">
+                            <button type="submit">✏</button>
+                        </form>
+                    </th>                      
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <th>
+                        <form action="{% url 'forum:create-comment' post.pk %}">
+                            <button type="submit">💬</button>
+                        </form>
+                    </th>
+                {% endif %}
+            </tr>
+        </table>
+    <li style="list-style-type: none">
+        {% if user.is_authenticated %}
+        <table>
+            <tr>
+                <th style="border: 1px black solid;">Comments:</th>
+            </tr>
+            <tr>
+                <th style="border: 1px black solid;">Comment author</th>
+                <th style="border: 1px black solid;">Content</th>
+                <th style="border: 1px black solid;">Date</th>
+                <th style="border: 1px black solid;">Updated at</th>
+                <th></th>
+            </tr>
+            {% for comment in post.comments.all %}
+            <tr>
+                <td style="border: 1px black solid;">{{comment.comment_author}}</td>
+                <td style="border: 1px black solid;">{{comment.body}}</td>
+                <td style="border: 1px black solid;">{{comment.post_date}}</td>
+                <td style="border: 1px black solid;">{{comment.update_date}}</td>
+                <td>
+                    <form action="{% url 'forum:update-comment' comment.pk %}">
+                        <button type="submit">✏</button> 
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
         {% endif %}
-    </div>
-</ol>
+    </li>
+</ul>
 {% empty %}
 <p>No posts yet :(</p>
 {% endfor %}
-
 {% endblock content %}
