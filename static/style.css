@@ -79,8 +79,6 @@ text-align: center;
 
 .card{
     transition: 100ms;
-    justify-self: center;
-    width: 540;
 }
 
 .card:hover{
