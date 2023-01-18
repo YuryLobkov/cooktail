@@ -9,23 +9,26 @@
     {% for post in posts %}
         <div class="card border-bg-secondary mb-3" >
             <div class="card-header post-header row">
-                <span class="col-8">{{post.author}}</span>
-                <span class="col-2">posted at {{post.created_at}}</span>
-                <span class="col-2">
+                <span class="col-7">{{post.author}}</span>
+                <span class="col-3">posted at {{post.created_at}}</span>
+                <span class="col-2 row">
                     {% if user == post.author %}
-                        <form method="POST" class="nomargin">
+                    <!-- <div class="buttons-post"> -->
+                        <form method="POST" class="nomargin col-6">
                             {% csrf_token %}
                             <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
                         </form>
-                        <form action="{% url 'forum:update-post' post.pk %}">
+                        <form action="{% url 'forum:update-post' post.pk %}" class="nomargin col-6">
                             <button class="btn btn-secondary" type="submit">Edit</button>
                         </form>
+                    <!-- </div> -->
                     {% endif %}
                 </span>
             </div>
             <div class="card-body">
                 <h5 class="card-title">{{post.title}}</h5>
                 <p class="card-text">{{post.content}}</p>
+                <button class="btn btn-secondary">Comments (24)</button>
             </div>
         </div>
     {% empty %}
