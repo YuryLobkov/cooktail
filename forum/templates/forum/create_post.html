@@ -1,10 +1,15 @@
 {% extends 'forum/base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}Create post{% endblock title %}
 {% block content %}
-<form action="" method="post">
-{% csrf_token %}
-<h1>CREATE POST PAGE</h1>
-{{form.as_p}}
-<button type="submit">Post</button>
-</form>
+<div class="container glass-layout">
+    <form method="post">
+        {% csrf_token %}
+        <h1>New post</h1>
+        {{form.media}}
+        {% crispy form %}
+        <hr>
+        <!-- <button type="submit" class="btn btn-success">Post</button> -->
+    </form>
+</div>
 {% endblock content %}
