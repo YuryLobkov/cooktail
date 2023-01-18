@@ -1,42 +1,67 @@
 {% extends 'forum/base.html' %}
 {% block title %}Create post{% endblock title %}
+{% load crispy_forms_tags %}
 {% block content %}
-<h1>DETAIL POST PAGE | <a href="{% url 'forum:post_list' %}">BACK TO POSTS</a></h1>
-<table>
-    <tr>
-        <th style="border: 1px black solid;">POST:</th>
-    </tr>
-    <tr>
-        <th style="border: 1px black solid;">Post author:</th>
-        <th style="border: 1px black solid;">Post title:</th>
-        <th style="border: 1px black solid;">Post content:</th>
-        <th style="border: 1px black solid;">Post created at:</th>
-        <th style="border: 1px black solid;">Updated at:</th>
-    </tr>
-    <tr>
-        <td style="border: 1px black solid;">{{comment.post.author}}</td>
-        <td style="border: 1px black solid;">{{comment.post.title}}</td>
-        <td style="border: 1px black solid;">{{comment.post.content}}</td>
-        <td style="border: 1px black solid;">{{comment.post.created_at}}</td>
-        <td style="border: 1px black solid;">{{comment.post.updated_at}}</td>
-    </tr>
-</table>
-</br>
-<table>
-    <tr>
-        <th style="border: 1px black solid;">Comments</th>
-    </tr>
-    <tr>
-        <th style="border: 1px black solid;">Comment author</th>
-        <th style="border: 1px black solid;">Content</th>
-        <th style="border: 1px black solid;">Date</th>
-        <th style="border: 1px black solid;">Updated at</th>
-    </tr>
-    <tr>
-        <td style="border: 1px black solid;">{{comment.comment_author}}</td>
-        <td style="border: 1px black solid;">{{comment.body}}</td>
-        <td style="border: 1px black solid;">{{comment.post_date}}</td>
-        <td style="border: 1px black solid;">{{comment.update_date}}</td>
-    </tr>
-</table>
+<div class="container glass-layout">
+    <div class="card">
+        <div class="card-header">{{post.author}} | {{post.created_at}}</div>
+        <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content}}</p>
+        </div>
+        <div class="card-footer">
+            {% if user == post.author %}
+                <div class="btn-group">
+                    <form method="POST" class="nomargin">
+                        {% csrf_token %}
+                        <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
+                    </form>
+                    <form action="{% url 'forum:update-post' post.pk %}">
+                        <button class="btn btn-secondary" type="submit">Edit</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>   
+    </div>   
+</div>   
+
+<div class="container glass-layout">
+    <div class="container-fluid">
+        
+        <div id="comments_section">
+            {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label style="width:max-content" for="{{ form.body.id_for_label }}">{{ comment_form |crispy}}</label>   
+                    <button class="btn btn-secondary" type="submit">Add comment <i class="fas fa-comments"></i></button>
+                </div>
+            </form>
+            {% else %}
+                <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to add a comment!</a><br>
+            {% endif %}
+
+            {% if comments %}
+            <strong class="text-secondary">{{ object.num_of_comments }} comment{{ object.num_of_comments|pluralize }}:</strong>
+            <hr>
+            <ul>
+                {% for comment in comments %}
+                    <li>           
+                        <div>
+                            <span>
+                                <strong class="">{{ comment.comment_author }} </strong>
+                                <small class="text-muted">{{ comment.create_date }}</small>
+                            </span>
+                            <p>{{ comment.body|safe }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+                {% else %}
+                    <strong class="text-secondary">No comments yet...</strong>
+                {% endif %}
+        </div> 
+
+    </div>
+</div>
 {% endblock content %}

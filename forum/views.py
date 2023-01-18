@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, PostForm
+from .forms import RegistrationForm, PostForm, CommentForm
 from django.contrib.auth import login, logout, authenticate
 from .models import Post, Comment
 from django.views.generic import UpdateView, CreateView, DeleteView, DetailView
@@ -64,7 +64,20 @@ class UpdateCommentView(UpdateView):
     success_url = '/forum/posts'
 
 class PostDetailView(DetailView):
-    model = Comment
-    fields = ['__all__']
+    model = Post
     template_name = 'forum/post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        linked_comments = Comment.objects.filter(post=self.get_object()).order_by('-post_date')
+        data['comments'] = linked_comments
+        data['comment_form'] = CommentForm(instance=self.request.user)
+        return data
+    
+    def post(self, request, *args, **kwargs):
+        new_comment = Comment(body=request.POST.get('body'), comment_author=request.user,
+                              post=self.get_object())
+        new_comment.save()
+        return self.get(self, request, *args, **kwargs)
+
 
