@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import (TemplateView, ListView, 
                                 CreateView, DeleteView,
                                 DetailView)
-from .models import Cocktail, Ingredients, Inventory
+from .models import Cocktail, Ingredients, Inventory, UserStorage
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -48,3 +48,8 @@ class InventoryCreate(CreateView):
     model = Inventory
     fields = '__all__'
     success_url = reverse_lazy('drinks:inventory_list')
+
+
+class UserStorageList(ListView):
+    model = UserStorage
+    # fiels = ['user_ingredients', 'user_tools']
