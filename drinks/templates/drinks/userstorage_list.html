@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container glass-layout">
+    <h1>userlist</h1>
+    <ul>
+        {% for item in userstorage_list %}
+            <li>{{item.user_ingredients}}</td>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
