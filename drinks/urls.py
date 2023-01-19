@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, DrinksList, DrinksCreate, DrinksDelete, DrinksDetails, IngredientsList, IngredientsCreate, InventoryList, InventoryCreate, UserStorageList
+from .views import HomeView, DrinksList, DrinksCreate, DrinksDelete, DrinksDetails, IngredientsList, IngredientsCreate, InventoryList, InventoryCreate, UserStorageView
 
 app_name = 'drinks'
 
@@ -13,5 +13,5 @@ urlpatterns = [
     path('add_ingredient/', IngredientsCreate.as_view(), name='add_ingredient'),
     path('inventory/', InventoryList.as_view(), name='inventory_list'),
     path('add_inventory/', InventoryCreate.as_view(), name='add_inventory'),
-    path('mystorage/', UserStorageList.as_view(), name='user_storage')
+    path('mystorage/', UserStorageView.as_view(), name='user_storage')
 ]

@@ -1,9 +1,14 @@
 from django.shortcuts import render
+from django.views import View
 from django.views.generic import (TemplateView, ListView, 
                                 CreateView, DeleteView,
-                                DetailView)
+                                DetailView, FormView)
 from .models import Cocktail, Ingredients, Inventory, UserStorage
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from .forms import StorageForm
+from django.http import HttpResponseForbidden
+from django.views.generic.detail import SingleObjectMixin
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -52,4 +57,39 @@ class InventoryCreate(CreateView):
 
 class UserStorageList(ListView):
     model = UserStorage
-    # fiels = ['user_ingredients', 'user_tools']
+    #success_url = reverse_lazy('drinks:user_storage')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = StorageForm()
+        return context
+
+    
+class StorageFormView(SingleObjectMixin, FormView):
+    template_name = 'drinks/userstorage_list.html'
+    form_class = StorageForm
+    model = UserStorage
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        # self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('drinks:user_storage')
+
+
+class UserStorageView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = UserStorageList.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = StorageFormView.as_view()
+        return view(request, *args, **kwargs)
+
+    # def get_object(self):
+    #     return get_object_or_404(User, pk=request.session['user_id'])
+

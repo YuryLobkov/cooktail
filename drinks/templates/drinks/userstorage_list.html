@@ -2,6 +2,11 @@
 {% block content %}
 <div class="container glass-layout">
     <h1>userlist</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit">
+    </form>
     <ul>
         {% for item in userstorage_list %}
             <li>{{item.user_ingredients}}</td>
