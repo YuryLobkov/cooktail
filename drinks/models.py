@@ -1,6 +1,7 @@
 from django.db import models
 import os
 from uuid import uuid4
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -68,3 +69,7 @@ class Cocktail(models.Model):
     def __str__(self):
         return f'{self.name},{self.group},{self.volume}%'
 
+class UserStorage(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_ingredients = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
+    user_tools = models.ForeignKey(Inventory, on_delete=models.CASCADE)
