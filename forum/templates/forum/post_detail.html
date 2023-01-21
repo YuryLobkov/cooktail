@@ -4,21 +4,17 @@
 {% block content %}
 <div class="container glass-layout">
     <div class="card">
-        <div class="card-header">{{post.author}} | {{post.created_at}}</div>
+        <div class="card-header">{{object.author}} | {{object.created_at}}</div>
         <div class="card-body">
-            <h5 class="card-title">{{post.title}}</h5>
-            <p class="card-text">{{post.content}}</p>
+            <h5 class="card-title">{{object.title}}</h5>
+            <p class="card-text">{{object.content}}</p>
         </div>
         <div class="card-footer">
-            {% if user == post.author %}
+            {% if user == object.author %}
                 <div class="btn-group">
                     <form method="POST" class="nomargin">
                         {% csrf_token %}
                         <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
-                    </form>
-                    <form action="{% url 'forum:update-post' post.pk %}">
-                        <button class="btn btn-secondary" type="submit">Edit</button>
-                    </form>
                 </div>
             {% endif %}
         </div>   
@@ -33,8 +29,8 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label style="width:max-content" for="{{ form.body.id_for_label }}">{{ comment_form |crispy}}</label>   
-                    <button class="btn btn-secondary" type="submit">Add comment <i class="fas fa-comments"></i></button>
+                    <label style="width:max-content" for="{{ form.body.id_for_label }}">{{ comment_form | crispy}}</label>   
+                    <button class="btn btn-secondary" type="submit">Add comment</button>
                 </div>
             </form>
             {% else %}

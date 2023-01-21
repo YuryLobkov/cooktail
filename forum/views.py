@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from .forms import RegistrationForm, PostForm, CommentForm
 from django.contrib.auth import login, logout, authenticate
 from .models import Post, Comment
@@ -50,12 +51,14 @@ class UpdatePostView(UpdateView):
 class CreateCommentView(CreateView):
     model = Comment
     template_name = 'forum/create_comment.html'
-    fields = ['post','body']
-    success_url = '/forum/posts'
+    fields = ['body']
 
     def form_valid(self, form):
         form.instance.comment_author = self.request.user
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('forum:posts')
 
 class UpdateCommentView(UpdateView):
     model = Comment
@@ -63,21 +66,28 @@ class UpdateCommentView(UpdateView):
     fields = ['body']
     success_url = '/forum/posts'
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'forum/post_detail.html'
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        linked_comments = Comment.objects.filter(post=self.get_object()).order_by('-post_date')
-        data['comments'] = linked_comments
-        data['comment_form'] = CommentForm(instance=self.request.user)
-        return data
-    
-    def post(self, request, *args, **kwargs):
-        new_comment = Comment(body=request.POST.get('body'), comment_author=request.user,
-                              post=self.get_object())
-        new_comment.save()
-        return self.get(self, request, *args, **kwargs)
-
-
+def post_detail(request, pk):
+    post = Post.objects.get(id=pk)
+    ied = pk
+    comments = Comment.objects.filter(post=post).order_by('-pk')
+    if request.method == 'POST':
+        cf = CommentForm(request.POST or None)
+        if cf.is_valid():
+            body = request.POST.get('body')
+            comment = Comment.objects.create(
+                post = post,
+                comment_author = request.user,
+                body = body
+            )
+            comment.save()
+            return redirect(post.get_absolute_url())
+    else:
+        cf = CommentForm()
+    context = {
+        'title':'post detail',
+        'comments': comments,
+        'object': post,
+        'ied': ied,
+        'comment_form': cf
+    }
+    return render(request, 'forum/post_detail.html', context)
