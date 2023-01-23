@@ -2,33 +2,20 @@
 {% block title %}Posts{% endblock title %}
 {% block content %}
 <div class="container glass-layout">
-<h1>FORUM</h1>
-<a href="/forum">Back to home</a>
-<a href="/forum/create-post">Create post</a>
+</br>
+<a class="btn btn-secondary" href="{% url 'drinks:home' %}">Back to home</a>
+<a class="btn btn-primary" href="/forum/create-post">Create post</a>
 <br></br>
     {% for post in posts %}
     <a style="text-decoration: none;" target="_top" href="{% url 'forum:post-detail' post.id %}">
         <div class="card border-bg-secondary mb-3" >
-            <div class="card-header">{{post.author}} | {{post.created_at}}</div>
-            {% if user == post.author %}
+            <div class="card-header">{{post.author}} | {{post.created_at | date:"F d, Y" }}</div>
                 <div class="card-body">
                     <h5 class="card-title">{{post.title}}</h5>
                     <p class="card-text">{{post.content}}</p>
                 </div>
-                </a>
-                <div class="card-footer">
-                    <div class="btn-group">
-                        <form method="POST" class="nomargin">
-                            {% csrf_token %}
-                            <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
-                        </form>
-                        <form action="{% url 'forum:update-post' post.pk %}">
-                            <button class="btn btn-secondary" type="submit">Edit</button>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
+    </a>
+            </div>
     {% empty %}
         <p>No posts yet :(</p>
     

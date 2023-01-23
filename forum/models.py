@@ -30,3 +30,6 @@ class Comment(models.Model):
     body = models.CharField(max_length=500)
     post_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('forum:post-detail', kwargs={'pk': self.pk})

@@ -7,7 +7,7 @@
         {% csrf_token %}
         <h1>CREATE POST PAGE</h1>
         {{form|crispy}}
-        <button class="btn btn-secondary" type="submit">Post</button>
+        <button class="btn btn-success" type="submit">Post</button>
         <a href="{% url 'forum:post_list' %}" class="btn btn-secondary">Back to posts</a>
     </form>  
 </div>

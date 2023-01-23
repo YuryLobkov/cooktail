@@ -8,7 +8,7 @@
         <h1>UPDATE POST PAGE</h1>
         {{form|crispy}}
         <button class="btn btn-success" type="submit">Update</button>
-        <a href="{% url 'forum:post_list' %}" class="btn btn-secondary">Back to posts</a>
+        <a href="{% url 'forum:post-detail' object.id %}" class="btn btn-secondary">Back to post</a>
     </form>
 </div>
 {% endblock content %}
