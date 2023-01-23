@@ -82,12 +82,6 @@ class DeleteCommentView(DeleteView, LoginRequiredMixin): #done
         post_id = self.object.post.id #HOW TO GET POST ID FOR FUTHER USE TO REDIRECT BY PK                           
         return reverse('forum:post-detail', kwargs={'pk': post_id})
     
-@login_required
-def delete_comment(request,pk):
-    comment=get_object_or_404(Comment,id=pk)
-    comment.delete()
-    return redirect(comment.post.get_absolute_url())
-
 def post_detail(request, pk):
     post = Post.objects.get(id=pk)
     ied = pk
@@ -113,3 +107,6 @@ def post_detail(request, pk):
         'comment_form': cf
     }
     return render(request, 'forum/post_detail.html', context)
+
+def profile(request):
+    return render(request, 'forum/user/profile.html')
