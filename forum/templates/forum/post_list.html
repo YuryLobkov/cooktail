@@ -2,34 +2,29 @@
 {% block title %}Posts{% endblock title %}
 {% block content %}
 <div class="container glass-layout">
-<h1>FORUM</h1>
-<a href="/forum">Back to home</a>
-<a href="/forum/create-post">Create post</a>
+</br>
+<a class="btn btn-secondary" href="{% url 'drinks:home' %}">Back to home</a>
+<a class="btn btn-primary" href="/forum/create-post">Create post</a>
 <br></br>
     {% for post in posts %}
+    <a style="text-decoration: none;" target="_top" href="{% url 'forum:post-detail' post.id %}">
         <div class="card border-bg-secondary mb-3" >
-            <div class="card-header post-header row">
-                <span class="col-8">{{post.author}}</span>
-                <span class="col-2">posted at {{post.created_at}}</span>
-                <span class="col-2">
-                    {% if user == post.author %}
-                        <form method="POST" class="nomargin">
-                            {% csrf_token %}
-                            <button class="btn btn-secondary" type="submit" name="post-id" value="{{post.id}}">Delete</button>
-                        </form>
-                        <form action="{% url 'forum:update-post' post.pk %}">
-                            <button class="btn btn-secondary" type="submit">Edit</button>
-                        </form>
+            <div class="card-header">{{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H, i" }}</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{post.title}}</h5>
+                    <p class="card-text">{{post.content}}</p>
+                </div>
+                <div class="card-footer">
+                    {% if comments %}
+                    <strong class="text-secondary">{{ post.num_of_comments }} comment{{ post.num_of_comments|pluralize }}:</strong>
                     {% endif %}
-                </span>
+                </div>    
+    </a>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">{{post.title}}</h5>
-                <p class="card-text">{{post.content}}</p>
-            </div>
-        </div>
     {% empty %}
         <p>No posts yet :(</p>
+    
     {% endfor %}
+    
 </div>
 {% endblock content %}

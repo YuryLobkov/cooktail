@@ -1,0 +1,66 @@
+{% extends 'forum/base.html' %}
+{% block title %}Create post{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container glass-layout">
+    <div class="card">
+        <div class="card-header">{{object.author}} | {{object.created_at | date:"F d, Y" }}</div>
+        <div class="card-body">
+            <h5 class="card-title">{{object.title}}</h5>
+            <p class="card-text">{{object.content}}</p>
+        </div>
+            {% if user == object.author %}
+                <div class="card-footer">
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'forum:update-post' object.id %}">Update</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'forum:delete-post' object.id %}">Delete</a>
+                </div> 
+            {% endif %}
+    </div>   
+</div>   
+
+
+<div class="container glass-layout">
+    <div class="container-fluid">
+        
+        <div id="comments_section">
+            {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label style="width:max-content" for="{{ form.body.id_for_label }}">{{ comment_form | crispy}}</label>   
+                    <button class="btn btn-secondary" type="submit">Add comment</button>
+                </div>
+            </form>
+            {% else %}
+                <a class="btn btn-secondary" href="{% url 'login' %}?next={{request.path}}">Log in to add a comment!</a><br>  {% comment "HOW TO REDIRECT TO LOGIN PAGE!" %}{% endcomment %}
+            {% endif %}
+
+            {% if comments %}
+            <strong class="text-secondary">{{ object.num_of_comments }} comment{{ object.num_of_comments|pluralize }}:</strong>
+            <hr>
+            <ul>
+                
+                {% for comment in comments %}
+                    <li>           
+                        <div>
+                            <span>
+                                <strong class="">{{ comment.comment_author }} </strong>
+                                <small> | {{ comment.post_date | date:"F d, P, Y" }}</small>
+                                {% if comment.comment_author.id == user.id %}
+                                    <small> <a style="text-decoration: none;" href="{% url 'forum:update-comment' comment.id %}">✏</a> </small>
+                                    <small> <a style="text-decoration: none;" href="{% url 'forum:delete-comment' comment.id %}">❌</a> </small>
+                                {% endif %}
+                            </span>
+                            <p>{{ comment.body|safe }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+                {% else %}
+                    <strong class="text-secondary">No comments yet...</strong>
+            {% endif %}
+        </div> 
+
+    </div>
+</div>
+{% endblock content %}
