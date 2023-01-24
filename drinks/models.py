@@ -73,3 +73,6 @@ class UserStorage(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     user_ingredients = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
     # user_tools = models.ForeignKey(Inventory, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user_id', 'user_ingredients')
