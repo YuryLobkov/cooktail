@@ -59,6 +59,11 @@ class UserStorageList(ListView):
     model = UserStorage
     #success_url = reverse_lazy('drinks:user_storage')
 
+    def get_queryset(self):
+        queryset = UserStorage.objects.filter(user_id = self.request.user)
+        return queryset
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = StorageForm()
