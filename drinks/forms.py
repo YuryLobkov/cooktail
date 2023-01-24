@@ -12,6 +12,6 @@ class StorageForm(forms.ModelForm):
     helper.form_class = 'form-group'
     helper.layout = Layout(Field('body',css_class='form-control mt-2 mb-3'))
 
-    def __init__(self,*args,**kwargs):
-        super (StorageForm,self ).__init__(*args,**kwargs)
-        self.fields['user_ingredients'].queryset = Ingredients.objects.filter(name = 'Vodka')
+    # def __init__(self,*args,**kwargs):
+    #     super (StorageForm,self ).__init__(*args,**kwargs)
+    #     self.fields['user_ingredients'].queryset = Ingredients.objects.filter(name = 'Vodka')

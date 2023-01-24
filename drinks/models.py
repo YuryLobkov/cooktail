@@ -76,3 +76,6 @@ class UserStorage(models.Model):
 
     class Meta:
         unique_together = ('user_id', 'user_ingredients')
+
+    def __str__(self):
+        return f'{self.user_id}, {self.user_ingredients}'

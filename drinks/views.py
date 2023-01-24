@@ -67,6 +67,9 @@ class UserStorageList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = StorageForm()
+        used_items = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients_id')
+        unused_items = Ingredients.objects.exclude(id__in = used_items)
+        context['form'].fields['user_ingredients'].queryset = Ingredients.objects.filter(id__in = (unused_items))
         return context
 
     
