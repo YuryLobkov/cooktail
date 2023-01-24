@@ -25,8 +25,10 @@ def sign_up(request):
     return render(request, 'registration/sign_up.html', context={'form':form})
 
 def post_list(request):
-    posts = Post.objects.all()
-    return render(request, 'forum/post_list.html', {'posts':posts})
+    posts = Post.objects.all().order_by('-created_at')
+    comments = Comment.objects.all()
+    return render(request, 'forum/post_list.html', {'posts':posts,
+                                                    'comments':comments})
 
 @login_required
 def create_post(request):

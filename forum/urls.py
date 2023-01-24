@@ -6,7 +6,7 @@ app_name = 'forum'
 
 urlpatterns = [
     path('sign-up', views.sign_up, name='sign-up'),
-    path('posts/', views.post_list, name='post_list'),
+    path('posts/', views.post_list, name='post_list'), #todo number of pages
     path('create-post', views.create_post, name='create-post'),
     path('update-post/<int:pk>', UpdatePostView.as_view(), name='update-post'),
     path('post/<int:pk>/delete/', DeletePostView.as_view(), name = 'delete-post'),
