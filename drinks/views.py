@@ -74,6 +74,11 @@ class StorageFormView(SingleObjectMixin, FormView):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         # self.object = self.get_object()
+
+        new_item = UserStorage(user_ingredients = Ingredients.objects.get(id= request.POST.get('user_ingredients')),
+                                user_id = self.request.user)
+        new_item.save()
+        # return self.get(self, request, *args, **kwargs)
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
