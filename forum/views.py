@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from .forms import RegistrationForm, PostForm, CommentForm
+from .forms import RegistrationForm, PostForm, CommentForm, UserEditForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import get_user_model
 from .models import Post, Comment
 from django.views.generic import UpdateView, CreateView, DeleteView, DetailView
 from django.contrib.auth.decorators import login_required
@@ -9,31 +10,72 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
-def home(request):
-    return render(request, 'forum/home.html')
 
 def sign_up(request):
+    if request.user.is_authenticated:
+        return redirect('start_page')
+    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/home')
+            messages.success(request, f'Your account {user.username} has been created!')
+            return redirect('start_page')
+        
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
     else:
         form = RegistrationForm()
+
     return render(request, 'registration/sign_up.html', context={'form':form})
+
+def custom_login(request):
+    if request.user.is_authenticated:
+        return redirect('start_page')
+    
+    if request.method == "POST":
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username = form.cleaned_data['username'],
+                password = form.cleaned_data['password']
+            )
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'You have been successfully logged in as {user.username}!')
+                return redirect('start_page')
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
+    form =  AuthenticationForm()
+
+    return render(request, 'registration/login.html', {'form':form})
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    messages.info(request, "Logged out successfully")
+    return redirect('start_page')
+
+
+
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
     comments = Comment.objects.all()
-    paginagor = Paginator(posts, 2)
+    paginagor = Paginator(posts, 1)
     page_number = request.GET.get('page')
     page_obj = paginagor.get_page(page_number)
     return render(request, 'forum/post_list.html', {'posts':posts,
                                                     'comments':comments,
-                                                    'page_obj': page_obj})
+                                                    'page_obj': page_obj,})
 
 @login_required
 def create_post(request):
@@ -116,6 +158,21 @@ def post_detail(request, pk):
     }
     return render(request, 'forum/post_detail.html', context)
 
-def profile(request):
-    # user = User
-    return render(request, 'forum/user/profile.html')
+# def profile(request, username):
+#     if request.method == "POST":
+#         user = request.user
+#         form = UserEditForm(request.POST, request.FILES, instance = user)
+#         if form.is_valid():
+#             user_form = form.save()
+#             messages.success(request, f'{user_form.username}, your profile has been updated!')
+#             return redirect('forum:profile', user_form.username)
+        
+#         for error in list(form.errors.values()):
+#             messages.error(request, error)
+
+#     user = User.objects.filter(username=username).first()
+#     if user:
+#         form = UserEditForm(instance=user)
+#         return render(request,'registration/profile.html', {'form':form} )
+    
+#     return redirect('home')

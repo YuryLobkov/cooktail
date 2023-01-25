@@ -18,11 +18,15 @@ from django.urls import path, include
 from .views import start_redirect_view
 from django.conf.urls.static import static
 from django.conf import settings
+from forum.views import sign_up, custom_login, custom_logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('drinks/', include('drinks.urls'), name='drinks'),
     path('', start_redirect_view, name='start_page'),
     path('forum/', include('forum.urls'), name='forum'),
-    path('', include('django.contrib.auth.urls'))
+    path('sign_up/', sign_up, name='sign-up'),
+    path('login/', custom_login, name='login'),
+    path('logout/', custom_logout, name='logout'),
+    # path('profile/<username>', views.profile, name='profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

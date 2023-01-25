@@ -4,7 +4,11 @@
 {% block content %}
 <div class="container glass-layout">
     <div class="card">
-        <div class="card-header">{{object.author}} | {{object.created_at | date:"F d, Y" }}</div>
+        <div class="card-header">
+            <a style="text-decoration: blue;" href="{% url 'forum:profile' user.username %}">
+                🐱‍👓(example profile pic) {{object.author}} | {{object.created_at | date:"F d, Y" }} at {{object.created_at | date:"H:i" }}
+            </a>
+        </div>
         <div class="card-body">
             <h5 class="card-title">{{object.title}}</h5>
             <p class="card-text">{{object.content}}</p>
