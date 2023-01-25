@@ -84,10 +84,10 @@ class UserToolsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ToolsForm()
+        context['form_tools'] = ToolsForm()
         used_tools = UserTools.objects.filter(user_id = self.request.user.id).values_list('user_inventory_id')
         unused_tools = Inventory.objects.exclude(id__in = used_tools)
-        context['form'].fields['user_inventory'].queryset = Inventory.objects.filter(id__in = (unused_tools))
+        context['form_tools'].fields['user_inventory'].queryset = Inventory.objects.filter(id__in = (unused_tools))
         return context
 
     

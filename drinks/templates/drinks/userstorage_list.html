@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container glass-layout">
-    <h1>userlist</h1>
+    <h1>user_ings</h1>
     <form method="POST">
         {% csrf_token %}
         {{form}}
@@ -17,10 +17,12 @@
             </li>
         {% endfor %}
     </ul>
-
+</div>
+<div class="container glass-layout">
+    <h1>usertools</h1>
     <form method="POST">
         {% csrf_token %}
-        {{form}}
+        {{form_tools}}
         <input type="submit">
     </form>
     <ul>
