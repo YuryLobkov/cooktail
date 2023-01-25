@@ -3,9 +3,9 @@ from django.views import View
 from django.views.generic import (TemplateView, ListView, 
                                 CreateView, DeleteView,
                                 DetailView, FormView)
-from .models import Cocktail, Ingredients, Inventory, UserStorage
+from .models import Cocktail, Ingredients, Inventory, UserStorage, UserTools
 from django.urls import reverse_lazy, reverse
-from .forms import StorageForm
+from .forms import StorageForm, ToolsForm
 from django.http import HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
@@ -70,6 +70,23 @@ class UserStorageList(ListView):
         used_items = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients_id')
         unused_items = Ingredients.objects.exclude(id__in = used_items)
         context['form'].fields['user_ingredients'].queryset = Ingredients.objects.filter(id__in = (unused_items))
+        return context
+
+
+class UserToolsList(ListView):
+    model = UserTools
+
+    def get_queryset(self):
+        queryset = UserTools.objects.filter(user_id = self.request.user)
+        return queryset
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ToolsForm()
+        used_tools = UserTools.objects.filter(user_id = self.request.user.id).values_list('user_inventory_id')
+        unused_tools = Inventory.objects.exclude(id__in = used_tools)
+        context['form'].fields['user_inventory'].queryset = Inventory.objects.filter(id__in = (unused_tools))
         return context
 
     
