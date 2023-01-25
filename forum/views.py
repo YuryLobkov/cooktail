@@ -7,7 +7,8 @@ from django.views.generic import UpdateView, CreateView, DeleteView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
@@ -27,8 +28,12 @@ def sign_up(request):
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
     comments = Comment.objects.all()
+    paginagor = Paginator(posts, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginagor.get_page(page_number)
     return render(request, 'forum/post_list.html', {'posts':posts,
-                                                    'comments':comments})
+                                                    'comments':comments,
+                                                    'page_obj': page_obj})
 
 @login_required
 def create_post(request):
@@ -38,6 +43,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            messages.success(request, f'Post "{post.title}" has been successfully created!')
             return redirect('/forum/posts')
     else:
         form = PostForm()
@@ -111,4 +117,5 @@ def post_detail(request, pk):
     return render(request, 'forum/post_detail.html', context)
 
 def profile(request):
+    # user = User
     return render(request, 'forum/user/profile.html')

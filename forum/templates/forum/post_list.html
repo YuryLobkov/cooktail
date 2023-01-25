@@ -1,12 +1,22 @@
 {% extends 'forum/base.html' %}
 {% block title %}Posts{% endblock title %}
 {% block content %}
+<div class="container">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{message.tags}}">
+        {{message}}
+      </div>
+      {% endfor %}
+    {% endif%}
+</div>
+
 <div class="container glass-layout">
 </br>
 <a class="btn btn-secondary" href="{% url 'drinks:home' %}">Back to home</a>
 <a class="btn btn-primary" href="/forum/create-post">Create post</a>
 <br></br>
-    {% for post in posts %}
+    {% for post in page_obj %}
     <a style="text-decoration: none;" target="_top" href="{% url 'forum:post-detail' post.id %}">
         <div class="card border-bg-secondary mb-3" >
             <div class="card-header">{{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H, i" }}</div>
@@ -26,5 +36,33 @@
     
     {% endfor %}
     
+    
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %} 
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">1</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a class="page-link">{{ page_obj.number}}</a>
+            </li>
+            
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+        
 </div>
 {% endblock content %}
