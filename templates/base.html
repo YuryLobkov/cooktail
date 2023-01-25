@@ -36,7 +36,7 @@
                   Logged as {{user.username}}
                 </a>
                 <ul class="dropdown-menu">
-                  {% comment %} <!-- <li><a class="dropdown-item" href="{% url 'forum:profile' user.username %}">My profile</a></li> --> {% endcomment %}
+                  <li><a class="dropdown-item" href="{% url 'profile' user.username %}">My profile</a></li>
                   {% comment %} <li><a class="dropdown-item" href="#">Another action</a></li> {% endcomment %}
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="/logout">Logout</a></li>

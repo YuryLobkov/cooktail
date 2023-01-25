@@ -19,10 +19,17 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+#TODO make possible to login with username or email
 
-class UserEditForm(UserChangeForm):
-    model = User
-    fields = ['__all__']
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name',
+                  'last_name',
+                  'email',
+                  'image']
 
 class PostForm(forms.ModelForm):
     class Meta:

@@ -20,12 +20,12 @@
         <p>USER {{form.instance.username}}</p>
         {% if user.username == form.instance.username %}
             <p>Edit {{form.instance.username}} profile page</p>
-            <img class="rounded-circle account-img profile-image" src="{{ user.profile.image.url }}">
+            <img class="rounded-circle account-img profile-image" src="{{ form.instance.image.url }}">
             {{ form.first_name|as_crispy_field }}
             {{ form.last_name|as_crispy_field }}
             {{ form.email|as_crispy_field }}
-            {{ form.username|as_crispy_field }}
-            {{ form.password|as_crispy_field }}
+            {% comment %} {{ form.username|as_crispy_field }} {% endcomment %}
+            {% comment %} {{ form.password|as_crispy_field }} {% endcomment %}
             <button class="btn btn-success" type="submit">Submit</button>
         {% endif %}
         </div>

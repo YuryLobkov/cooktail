@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from .forms import RegistrationForm, PostForm, CommentForm, UserEditForm
+from .forms import RegistrationForm, PostForm, CommentForm, UserUpdateForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
@@ -63,9 +63,6 @@ def custom_logout(request):
     logout(request)
     messages.info(request, "Logged out successfully")
     return redirect('start_page')
-
-
-
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -158,21 +155,21 @@ def post_detail(request, pk):
     }
     return render(request, 'forum/post_detail.html', context)
 
-# def profile(request, username):
-#     if request.method == "POST":
-#         user = request.user
-#         form = UserEditForm(request.POST, request.FILES, instance = user)
-#         if form.is_valid():
-#             user_form = form.save()
-#             messages.success(request, f'{user_form.username}, your profile has been updated!')
-#             return redirect('forum:profile', user_form.username)
+def profile(request, username):
+    if request.method == "POST":
+        user = request.user
+        form = UserUpdateForm(request.POST, request.FILES, instance = user)
+        if form.is_valid():
+            user_form = form.save()
+            messages.success(request, f'{user_form.username}, your profile has been updated!')
+            return redirect('profile', user_form.username)
         
-#         for error in list(form.errors.values()):
-#             messages.error(request, error)
+        for error in list(form.errors.values()):
+            messages.error(request, error)
 
-#     user = User.objects.filter(username=username).first()
-#     if user:
-#         form = UserEditForm(instance=user)
-#         return render(request,'registration/profile.html', {'form':form} )
+    user = get_user_model().objects.filter(username=username).first()
+    if user:
+        form = UserUpdateForm(instance=user)
+        return render(request,'registration/profile.html', {'form':form} )
     
-#     return redirect('home')
+    return redirect('home')
