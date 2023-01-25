@@ -75,6 +75,7 @@ class UserStorageList(ListView):
 
 class UserToolsList(ListView):
     model = UserTools
+    template_name = 'drinks/userstorage_list.html'
 
     def get_queryset(self):
         queryset = UserTools.objects.filter(user_id = self.request.user)
@@ -98,12 +99,26 @@ class StorageFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
-        # self.object = self.get_object()
-
         new_item = UserStorage(user_ingredients = Ingredients.objects.get(id= request.POST.get('user_ingredients')),
                                 user_id = self.request.user)
         new_item.save()
-        # return self.get(self, request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('drinks:user_storage')
+
+
+class ToolsFormView(SingleObjectMixin, FormView):
+    template_name = 'drinks/userstorage_list.html'
+    form_class = ToolsForm
+    model = UserTools
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        new_tool = UserTools(user_inventory = Inventory.objects.get(id= request.POST.get('user_inventory')),
+                                user_id = self.request.user.id)
+        new_tool.save()
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -113,17 +128,18 @@ class StorageFormView(SingleObjectMixin, FormView):
 class UserStorageView(View):
 
     def get(self, request, *args, **kwargs):
-        view = UserStorageList.as_view()
+        view = UserToolsList.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        view = StorageFormView.as_view()
+        view = ToolsFormView.as_view()
         return view(request, *args, **kwargs)
-
-    # def get_object(self):
-    #     return get_object_or_404(User, pk=request.session['user_id'])
 
 
 class UserStorageDelete(DeleteView):
     model = UserStorage
+    success_url = reverse_lazy('drinks:user_storage')
+
+class UserToolsDelete(DeleteView):
+    model = UserTools
     success_url = reverse_lazy('drinks:user_storage')

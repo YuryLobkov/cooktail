@@ -17,5 +17,21 @@
             </li>
         {% endfor %}
     </ul>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit">
+    </form>
+    <ul>
+        {% for item in usertools_list %}
+            <li>{{item.user_inventory}}
+                <form method="POST" action="{% url 'drinks:tool_delete' item.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="DELETE">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
