@@ -9,7 +9,12 @@
     </form>
     <ul>
         {% for item in userstorage_list %}
-            <li>{{item.user_ingredients}}</td>
+            <li>{{item.user_ingredients}}
+                <form method="POST" action="{% url 'drinks:storage_delete' item.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="DELETE">
+                </form>
+            </li>
         {% endfor %}
     </ul>
 </div>

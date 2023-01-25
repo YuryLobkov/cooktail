@@ -106,3 +106,7 @@ class UserStorageView(View):
     # def get_object(self):
     #     return get_object_or_404(User, pk=request.session['user_id'])
 
+
+class UserStorageDelete(DeleteView):
+    model = UserStorage
+    success_url = reverse_lazy('drinks:user_storage')
