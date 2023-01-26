@@ -10,11 +10,11 @@ class CustomUser(AbstractUser):
 
     def image_upload_to(self, instance = None):
         if instance:
-            return os.path.join('User', self.username, instance)
+            return os.path.join('Users', self.username, instance)
         return None
 
     email = models.EmailField(unique=True)
-    image = models.ImageField(default='default/default-cooktail-user.png', upload_to=image_upload_to)
+    image = models.ImageField(default='default/avatardefault_92824.png', upload_to=image_upload_to)
     
     def __str__(self):
         return self.username

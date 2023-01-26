@@ -2,26 +2,17 @@
 {% block title %}Posts{% endblock title %}
 {% block content %}
 
-<div class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{message.tags}}">
-                {{message}}
-            </div>
-        {% endfor %}
-    {% endif%}
-</div>
-
 <div class="container glass-layout">
 </br>
     <a class="btn btn-secondary" href="{% url 'drinks:home' %}">Back to home</a>
     <a class="btn btn-primary" href="/forum/create-post">Create post</a>
 <br></br>
 
+{% if posts %}
     {% for post in page_obj %}
         <div class="card border-bg-secondary mb-3" >
             <div class="card-header">
-                <a style="text-decoration: blue;" href="{% url 'profile' user.username %}">🐱‍👓(example profile pic) {{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H:i" }}</a>
+                <a style="text-decoration: blue;" href="{% url 'profile' post.author %}">🐱‍👓(example profile pic) {{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H:i" }}</a>
             </div>
             <a style="text-decoration: none; color: black;" target="_top" href="{% url 'forum:post-detail' post.id %}">         
                 <div class="card-body">
@@ -37,35 +28,40 @@
                 </div>    
             </a>
         </div>
-        {% empty %}
-            <p>No posts yet :(</p>
     {% endfor %}
-     
     <nav>
         <ul class="pagination">
-            {% if page_obj.has_previous %} 
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% if page_obj.paginator.num_pages == 1 %}
+
+            {% else %}
+
+                {% if page_obj.has_previous %} 
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">1</a>
+                    </li>
+                {% endif %}
+                <!--  -->
+                <li class="page-item active">
+                    <a class="page-link">{{ page_obj.number}}</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page=1">1</a>
-                </li>
-            {% endif %}
-            <!--  -->
-            <li class="page-item active">
-                <a class="page-link">{{ page_obj.number}}</a>
-            </li>
-            <!--  -->
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                </li>
-            {% endif %}
+                <!--  -->
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                {% endif %}
+
+            {% endif%}
         </ul>
     </nav>
-        
+{% else %}
+    <span class="container"> No posts yet </span>
+{% endif %}    
 </div>
 {% endblock content %}

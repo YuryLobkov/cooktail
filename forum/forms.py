@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(help_text='enter a valid email, please!', required=True)
+    email = forms.EmailField(help_text='Required. Enter a valid email adress.', required=True)
 
     class Meta:
         model = get_user_model()

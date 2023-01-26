@@ -14,20 +14,38 @@
 </div>
 
 <div class="container">
-    <form action="" method="post">
+    {% comment %} !!!!!enctype is very important thing without 
+                  which profile pic doenst updates!!!!!! {% endcomment %}
+    <form action="" method="post" enctype="multipart/form-data">  
         {% csrf_token %}
         <div class="container glass-layout">
-        <p>USER {{form.instance.username}}</p>
-        {% if user.username == form.instance.username %}
-            <p>Edit {{form.instance.username}} profile page</p>
-            <img class="rounded-circle account-img profile-image" src="{{ form.instance.image.url }}">
-            {{ form.first_name|as_crispy_field }}
-            {{ form.last_name|as_crispy_field }}
-            {{ form.email|as_crispy_field }}
-            {% comment %} {{ form.username|as_crispy_field }} {% endcomment %}
-            {% comment %} {{ form.password|as_crispy_field }} {% endcomment %}
-            <button class="btn btn-success" type="submit">Submit</button>
-        {% endif %}
+            <p>@{{form.instance.username}} profile information</p>
+            <hr>
+            {% if user.username == form.instance.username %}
+                <input type="file" id="id_image" name="image" hidden/>
+                    <label for="id_image">
+                        <img class="rounded-circle account-img profile-image" 
+                        style="cursor: pointer;" 
+                        src="{{ form.instance.image.url }}"
+                        title="Upload new profile image">
+                    </label>
+            {% else %}
+                <img class="rounded-circle account-img profile-image" src="{{ form.instance.image.url }}">
+            {% endif %}
+            <p>First name: {{ form.instance.first_name }}</p>
+            <p>Last name: {{ form.instance.last_name }}</p>
+            {% if user.username == form.instance.username %}
+                <hr>
+                <p>Edit {{form.instance.username}} profile page:</p>
+                <hr>
+                <div class=""></div>
+                {{ form.first_name|as_crispy_field }}
+                {{ form.last_name|as_crispy_field }}
+                {{ form.email|as_crispy_field }}
+                {% comment %} {{ form.username|as_crispy_field }} {% endcomment %}
+                {% comment %} {{ form.password|as_crispy_field }} {% endcomment %}
+                <button class="btn btn-success" type="submit">Submit</button>
+            {% endif %}
         </div>
     </form>      
 </div>
