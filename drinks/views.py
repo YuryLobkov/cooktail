@@ -159,3 +159,10 @@ class UserStorageDelete(DeleteView):
 class UserToolsDelete(DeleteView):
     model = UserTools
     success_url = reverse_lazy('drinks:user_tools')
+
+
+class UserDrinksList(DrinksList):
+    def get_queryset(self):
+        allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
+        queryset = Cocktail.objects.filter(main_ingredients__in = allowed_ings)
+        return queryset
