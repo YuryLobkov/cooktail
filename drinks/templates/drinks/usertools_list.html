@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container glass-layout">
-    <h1>user_ings</h1>
+    <h1>usertools</h1>
     <form method="POST">
         {% csrf_token %}
-        {{form_inventory}}
+        {{form_tools}}
         <input type="submit">
     </form>
     <ul>
-        {% for item in userstorage_list %}
-            <li>{{item.user_ingredients}}
-                <form method="POST" action="{% url 'drinks:storage_delete' item.id %}">
+        {% for item in usertools_list %}
+            <li>{{item.user_inventory}}
+                <form method="POST" action="{% url 'drinks:tool_delete' item.id %}">
                     {% csrf_token %}
                     <input type="submit" value="DELETE">
                 </form>

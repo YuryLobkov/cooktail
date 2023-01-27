@@ -66,16 +66,16 @@ class UserStorageList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = StorageForm()
+        context['form_inventory'] = StorageForm()
         used_items = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients_id')
         unused_items = Ingredients.objects.exclude(id__in = used_items)
-        context['form'].fields['user_ingredients'].queryset = Ingredients.objects.filter(id__in = (unused_items))
+        context['form_inventory'].fields['user_ingredients'].queryset = Ingredients.objects.filter(id__in = (unused_items))
         return context
 
 
 class UserToolsList(ListView):
     model = UserTools
-    template_name = 'drinks/userstorage_list.html'
+    template_name = 'drinks/usertools_list.html'
 
     def get_queryset(self):
         queryset = UserTools.objects.filter(user_id = self.request.user)
@@ -109,7 +109,7 @@ class StorageFormView(SingleObjectMixin, FormView):
 
 
 class ToolsFormView(SingleObjectMixin, FormView):
-    template_name = 'drinks/userstorage_list.html'
+    template_name = 'drinks/usertools_list.html'
     form_class = ToolsForm
     model = UserTools
 
@@ -122,10 +122,10 @@ class ToolsFormView(SingleObjectMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('drinks:user_storage')
+        return reverse('drinks:user_tools')
 
 
-class UserStorageView(View):
+class UserToolsView(View):
 
     def get(self, request, *args, **kwargs):
         view = UserToolsList.as_view()
@@ -136,10 +136,26 @@ class UserStorageView(View):
         return view(request, *args, **kwargs)
 
 
+class UserStorageView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = UserStorageList.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = StorageFormView.as_view()
+        return view(request, *args, **kwargs)
+
+# TODO make mixin for both ingredients and tools views
+# TODO unite 2 views of users storage in one
+# class UserStorageView(UserToolsView, UserIngredientsView):
+#     pass
+
+
 class UserStorageDelete(DeleteView):
     model = UserStorage
     success_url = reverse_lazy('drinks:user_storage')
 
 class UserToolsDelete(DeleteView):
     model = UserTools
-    success_url = reverse_lazy('drinks:user_storage')
+    success_url = reverse_lazy('drinks:user_tools')
