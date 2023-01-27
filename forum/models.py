@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
         return None
 
     email = models.EmailField(unique=True)
-    image = models.ImageField(default='default/avatardefault_92824.png', upload_to=image_upload_to)
+    image = models.ImageField(default='default/default-cooktail-user.png', upload_to=image_upload_to)
     
     def __str__(self):
         return self.username

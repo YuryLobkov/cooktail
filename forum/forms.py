@@ -19,7 +19,19 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-#TODO make possible to login with username or email
+    
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class':'form-control',
+               'placeholder': 'Username or email'}),
+        label="Username or Email")
+    
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class':'form-control',
+               'placeholder':'Password'}))
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()

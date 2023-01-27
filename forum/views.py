@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.contrib.auth.forms import AuthenticationForm
+from .forms import UserLoginForm
 
 # Create your views here.
 
@@ -40,7 +40,7 @@ def custom_login(request):
         return redirect('start_page')
     
     if request.method == "POST":
-        form = AuthenticationForm(request=request, data=request.POST)
+        form = UserLoginForm(request=request, data=request.POST)
         if form.is_valid():
             user = authenticate(
                 username = form.cleaned_data['username'],
@@ -54,7 +54,7 @@ def custom_login(request):
             for error in list(form.errors.values()):
                 messages.error(request, error)
 
-    form =  AuthenticationForm()
+    form =  UserLoginForm()
 
     return render(request, 'registration/login.html', {'form':form})
 
