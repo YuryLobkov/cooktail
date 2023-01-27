@@ -162,6 +162,7 @@ class UserToolsDelete(DeleteView):
 
 
 class UserDrinksList(DrinksList):
+    template_name = 'drinks/user_ing_cocktail_list.html'
     def get_queryset(self):
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
         queryset = Cocktail.objects.filter(main_ingredients__in = allowed_ings)
