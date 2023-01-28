@@ -12,7 +12,47 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .forms import UserLoginForm
 
+#emailconfirm imports
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from .tokens import activation_token
+
 # Create your views here.
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+    if user is not None and activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        messages.success(request, f'You have passed email confirmation. Now you can log-in!')
+        return redirect('login')
+    else:
+        messages.error(request, f'Confirmation link is invalid. Maybe it is already expired')
+    return redirect('start_page')
+
+def email_activate(request, user, to_email):
+    mail_subject = 'Cooktail - portal for bartenders! Account activation.'
+    message = render_to_string('forum/account_activation.html', {
+        'user': user.username,
+        'domain':get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    if email.send():
+        messages.success(request, f'<b>{user}</b>, to complete the registration, you need to pass <b>email confirmation.</b> \
+                     Please, go to your <b>{to_email}</b> inbox and check it. There should be an email with instructions that we sent you!')
+    else:
+        messages.error(request, f'We have some problem with sending email to {email}. Did you type it correctly?')
 
 def sign_up(request):
     if request.user.is_authenticated:
@@ -22,12 +62,17 @@ def sign_up(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            messages.success(request, f'Your account {user.username} has been created!')
+            user.is_active=False
+            user.save()
+            email_activate(request, user, form.cleaned_data.get('email'))
             return redirect('start_page')
         
         else:
-            for error in list(form.errors.values()):
+            for key, error in list(form.errors.items()):
+                if key == 'captcha' and error [0] == 'This field is required.':
+                    messages.error(request, 'You must pass reCAPTCHA')
+                    continue
+                
                 messages.error(request, error)
 
     else:
@@ -51,7 +96,11 @@ def custom_login(request):
                 messages.success(request, f'You have been successfully logged in as {user.username}!')
                 return redirect('start_page')
         else:
-            for error in list(form.errors.values()):
+            for key, error in list(form.errors.items()):
+                if key == 'captcha' and error [0] == 'This field is required.':
+                    messages.error(request, 'You must pass reCAPTCHA')
+                    continue
+                
                 messages.error(request, error)
 
     form =  UserLoginForm()
@@ -67,7 +116,7 @@ def custom_logout(request):
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
     comments = Comment.objects.all()
-    paginagor = Paginator(posts, 1)
+    paginagor = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginagor.get_page(page_number)
     return render(request, 'forum/post_list.html', {'posts':posts,

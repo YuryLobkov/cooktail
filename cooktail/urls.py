@@ -18,7 +18,7 @@ from django.urls import path, include
 from .views import start_redirect_view
 from django.conf.urls.static import static
 from django.conf import settings
-from forum.views import sign_up, custom_login, custom_logout, profile
+from forum.views import sign_up, custom_login, custom_logout, profile, activate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +29,6 @@ urlpatterns = [
     path('login/', custom_login, name='login'),
     path('logout/', custom_logout, name='logout'),
     path('profile/<username>', profile, name='profile'),
+    path('activate/<uidb64>/<token>', activate, name='activate'),
     # path('profile/<username>', views.profile, name='profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -20,9 +20,13 @@
                     <p class="card-text">{{post.content}}</p>
                 </div>
                 <div class="card-footer">
-                    {% if comments %}
+                    {% if comments and post.num_of_comments != 0 %}
                         <strong class="text-secondary">
                             {{ post.num_of_comments }} comment{{ post.num_of_comments|pluralize }}
+                        </strong>
+                    {% else %}
+                        <strong class="text-secondary">
+                            No comments yet
                         </strong>
                     {% endif %}
                 </div>    
@@ -61,7 +65,9 @@
         </ul>
     </nav>
 {% else %}
-    <span class="container"> No posts yet </span>
+    <strong class="container text-secondary">
+        No posts yet
+    </strong>
 {% endif %}    
 </div>
 {% endblock content %}

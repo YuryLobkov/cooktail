@@ -1,13 +1,16 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(help_text='Required. Enter a valid email adress.', required=True)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
     class Meta:
         model = get_user_model()
@@ -32,6 +35,8 @@ class UserLoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class':'form-control',
                'placeholder':'Password'}))
+    
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
