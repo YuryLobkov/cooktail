@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from .forms import RegistrationForm, PostForm, CommentForm, UserUpdateForm
+from .forms import RegistrationForm, PostForm, CommentForm, UserUpdateForm, PasswordChangeForm, PasswordResetForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
@@ -18,6 +18,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from django.db.models.query_utils import Q
 from .tokens import activation_token
 
 # Create your views here.
@@ -40,7 +41,7 @@ def activate(request, uidb64, token):
 
 def email_activate(request, user, to_email):
     mail_subject = 'Cooktail - portal for bartenders! Account activation.'
-    message = render_to_string('forum/account_activation.html', {
+    message = render_to_string('user/email_template_account_activation.html', {
         'user': user.username,
         'domain':get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -78,7 +79,85 @@ def sign_up(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'registration/sign_up.html', context={'form':form})
+    return render(request, 'user/sign_up.html', context={'form':form})
+
+def password_change(request):
+    user = request.user
+    if request.method == 'POST':
+        form = PasswordChangeForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your password has been changed!')
+            return redirect('login')
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+    form = PasswordChangeForm(user)
+    return render(request, 'user/password_change_confirmation.html', {'form':form})
+
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data['email']
+            associated_user = get_user_model().objects.filter(Q(email=user_email)).first()
+            if associated_user:
+                subject = 'Cooktail - portal for bartenders! Password reset.'
+                message = render_to_string('user/email_template_password_reset.html', {
+                    'user': associated_user,
+                    'domain':get_current_site(request).domain,
+                    'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                    'token': activation_token.make_token(associated_user),
+                    'protocol': 'https' if request.is_secure() else 'http'
+                })
+                email = EmailMessage(subject, message, to=[associated_user.email])
+                if email.send():
+                    messages.success(request, """
+                        <b>Password reset sent</b><hr>
+                        <p>We have send you an email with instructions. If an account with such an email exists,
+                        you will recieve it shortly!</p>
+                        """
+                    )
+                else:
+                    messages.error(request, 'We have problems with sending to you a password reset email.')
+            return redirect('start_page')        
+        
+        for key, error in list(form.errors.items()):
+            if key == 'captcha' and error [0] == 'This field is required.':
+                messages.error(request, 'You must pass reCAPTCHA')
+                continue
+                
+            messages.error(request, error)     
+
+    form = PasswordResetForm()
+
+    return render(request, 'user/password_reset_confirmation.html', {'form':form})
+
+def password_reset_confirm(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+    if user is not None and activation_token.check_token(user, token):
+        if request.method == "POST":
+            form = PasswordChangeForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f'Your password has been set!')
+                return redirect('start_page')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+
+        form = PasswordChangeForm(user)    
+        return render(request, 'user/password_reset_confirmation.html', {'form':form})
+    else:
+        messages.error(request, f'Confirmation link is invalid. Maybe it is already expired')
+    messages.error(request, 'Something went wrong...')
+
+    return redirect('start_page')
 
 def custom_login(request):
     if request.user.is_authenticated:
@@ -105,7 +184,7 @@ def custom_login(request):
 
     form =  UserLoginForm()
 
-    return render(request, 'registration/login.html', {'form':form})
+    return render(request, 'user/login.html', {'form':form})
 
 @login_required
 def custom_logout(request):
@@ -219,6 +298,6 @@ def profile(request, username):
     user = get_user_model().objects.filter(username=username).first()
     if user:
         form = UserUpdateForm(instance=user)
-        return render(request,'registration/profile.html', {'form':form} )
+        return render(request,'user/profile.html', {'form':form} )
     
     return redirect('home')

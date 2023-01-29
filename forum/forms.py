@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
@@ -47,6 +47,17 @@ class UserUpdateForm(forms.ModelForm):
                   'last_name',
                   'email',
                   'image']
+
+class PasswordChangeForm(SetPasswordForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['new_password1', 'new_password2']
+
+class PasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())    
 
 class PostForm(forms.ModelForm):
     class Meta:
