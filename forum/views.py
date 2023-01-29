@@ -1,25 +1,30 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from .forms import RegistrationForm, PostForm, CommentForm, UserUpdateForm, PasswordChangeForm, PasswordResetForm
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth import get_user_model
-from .models import Post, Comment
-from django.views.generic import UpdateView, CreateView, DeleteView, DetailView
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
+from django.urls import reverse
+from django.views.generic import UpdateView, CreateView, DeleteView
 from django.core.paginator import Paginator
-from .forms import UserLoginForm
-
-#emailconfirm imports
-from django.template.loader import render_to_string
+"""
+IMPORT FROM PROJECT FILES
+"""
+from .forms import RegistrationForm, PostForm, CommentForm, UserUpdateForm, \
+                   PasswordChangeForm, PasswordResetForm
+from .models import Post, Comment
+"""
+AUTH AND EMAIL CONFIRMATION IMPORTS
+"""
+from django.template.loader import render_to_string, get_template
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.db.models.query_utils import Q
 from .tokens import activation_token
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import get_user_model
+from .forms import UserLoginForm
+from django.contrib import messages
+from django.template import Context
 
 # Create your views here.
 def activate(request, uidb64, token):
@@ -39,26 +44,33 @@ def activate(request, uidb64, token):
         messages.error(request, f'Confirmation link is invalid. Maybe it is already expired')
     return redirect('start_page')
 
+
 def email_activate(request, user, to_email):
-    mail_subject = 'Cooktail - portal for bartenders! Account activation.'
-    message = render_to_string('user/email_template_account_activation.html', {
+    subject = 'Cooktail - portal for bartenders! Account activation.'
+    data_context = {
         'user': user.username,
         'domain':get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': activation_token.make_token(user),
         'protocol': 'https' if request.is_secure() else 'http'
-    })
-    email = EmailMessage(mail_subject, message, to=[to_email])
+    }
+    message = get_template('user/email_template_account_activation.html').render(data_context)
+    email = EmailMessage(subject, message, to=[to_email])
+    email.content_subtype = 'html'
+    email.send()
     if email.send():
-        messages.success(request, f'<b>{user}</b>, to complete the registration, you need to pass <b>email confirmation.</b> \
-                     Please, go to your <b>{to_email}</b> inbox and check it. There should be an email with instructions that we sent you!')
+        messages.success(request, f'<b>{user}</b>, to complete the registration, \
+                         you need to pass <b>email confirmation.</b> \n Please, go \
+                         to your <b>{to_email}</b> inbox and check it. There should \
+                         be an email with instructions that we sent you!')
     else:
-        messages.error(request, f'We have some problem with sending email to {email}. Did you type it correctly?')
+        messages.error(request, f'We have some problem with sending email to {email}.\
+                                  Did you type it correctly?')
+
 
 def sign_up(request):
     if request.user.is_authenticated:
-        return redirect('start_page')
-    
+        return redirect('start_page')    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -66,20 +78,17 @@ def sign_up(request):
             user.is_active=False
             user.save()
             email_activate(request, user, form.cleaned_data.get('email'))
-            return redirect('start_page')
-        
+            return redirect('start_page')        
         else:
             for key, error in list(form.errors.items()):
                 if key == 'captcha' and error [0] == 'This field is required.':
                     messages.error(request, 'You must pass reCAPTCHA')
-                    continue
-                
+                    continue                
                 messages.error(request, error)
-
     else:
         form = RegistrationForm()
-
     return render(request, 'user/sign_up.html', context={'form':form})
+
 
 def password_change(request):
     user = request.user
@@ -95,6 +104,7 @@ def password_change(request):
     form = PasswordChangeForm(user)
     return render(request, 'user/password_change_confirmation.html', {'form':form})
 
+
 def password_reset(request):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
@@ -103,35 +113,37 @@ def password_reset(request):
             associated_user = get_user_model().objects.filter(Q(email=user_email)).first()
             if associated_user:
                 subject = 'Cooktail - portal for bartenders! Password reset.'
-                message = render_to_string('user/email_template_password_reset.html', {
+                data_context = {
                     'user': associated_user,
                     'domain':get_current_site(request).domain,
                     'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
                     'token': activation_token.make_token(associated_user),
                     'protocol': 'https' if request.is_secure() else 'http'
-                })
+                }
+                message = get_template('user/email_template_password_reset.html').render(data_context)
                 email = EmailMessage(subject, message, to=[associated_user.email])
+                email.content_subtype = 'html'
+                email.send()
                 if email.send():
-                    messages.success(request, """
+                    messages.success(request, 
+                        """
                         <b>Password reset sent</b><hr>
-                        <p>We have send you an email with instructions. If an account with such an email exists,
-                        you will recieve it shortly!</p>
+                        <p>We have send you an email with instructions. If an account with \
+                        such an email exists,you will recieve it shortly!</p>
                         """
                     )
                 else:
-                    messages.error(request, 'We have problems with sending to you a password reset email.')
-            return redirect('start_page')        
-        
+                    messages.error(request, 'We have problems with sending to \
+                                             you a password reset email.')
+            return redirect('start_page')               
         for key, error in list(form.errors.items()):
             if key == 'captcha' and error [0] == 'This field is required.':
                 messages.error(request, 'You must pass reCAPTCHA')
-                continue
-                
+                continue         
             messages.error(request, error)     
-
     form = PasswordResetForm()
-
     return render(request, 'user/password_reset_confirmation.html', {'form':form})
+
 
 def password_reset_confirm(request, uidb64, token):
     User = get_user_model()
@@ -150,26 +162,23 @@ def password_reset_confirm(request, uidb64, token):
             else:
                 for error in list(form.errors.values()):
                     messages.error(request, error)
-
         form = PasswordChangeForm(user)    
         return render(request, 'user/password_reset_confirmation.html', {'form':form})
     else:
         messages.error(request, f'Confirmation link is invalid. Maybe it is already expired')
     messages.error(request, 'Something went wrong...')
-
     return redirect('start_page')
+
 
 def custom_login(request):
     if request.user.is_authenticated:
         return redirect('start_page')
-    
-    if request.method == "POST":
+    if request.method == 'POST':
         form = UserLoginForm(request=request, data=request.POST)
         if form.is_valid():
             user = authenticate(
                 username = form.cleaned_data['username'],
-                password = form.cleaned_data['password']
-            )
+                password = form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
                 messages.success(request, f'You have been successfully logged in as {user.username}!')
@@ -179,18 +188,17 @@ def custom_login(request):
                 if key == 'captcha' and error [0] == 'This field is required.':
                     messages.error(request, 'You must pass reCAPTCHA')
                     continue
-                
                 messages.error(request, error)
-
     form =  UserLoginForm()
-
     return render(request, 'user/login.html', {'form':form})
+
 
 @login_required
 def custom_logout(request):
     logout(request)
     messages.info(request, "Logged out successfully")
     return redirect('start_page')
+
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -201,6 +209,7 @@ def post_list(request):
     return render(request, 'forum/post_list.html', {'posts':posts,
                                                     'comments':comments,
                                                     'page_obj': page_obj,})
+
 
 @login_required
 def create_post(request):
@@ -216,7 +225,8 @@ def create_post(request):
         form = PostForm()
     return render(request, 'forum/create_post.html', {'form':form})
 
-class UpdatePostView(UpdateView, LoginRequiredMixin): #done
+
+class UpdatePostView(UpdateView, LoginRequiredMixin):  # Done.
     model = Post
     template_name = 'forum/update_post.html'
     fields = ['title', 'content']
@@ -225,11 +235,13 @@ class UpdatePostView(UpdateView, LoginRequiredMixin): #done
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class DeletePostView(DeleteView, LoginRequiredMixin): #done
+
+class DeletePostView(DeleteView, LoginRequiredMixin):  # Done.
     model = Post
     success_url = '/forum/posts'
-       
-class CreateCommentView(CreateView, LoginRequiredMixin): #done
+
+
+class CreateCommentView(CreateView, LoginRequiredMixin):  # Done.
     
     model = Comment
     template_name = 'forum/create_comment.html'
@@ -239,24 +251,25 @@ class CreateCommentView(CreateView, LoginRequiredMixin): #done
         form.instance.comment_author = self.request.user
         return super().form_valid(form)
 
-class UpdateCommentView(UpdateView, LoginRequiredMixin): #done
+
+class UpdateCommentView(UpdateView, LoginRequiredMixin):  # Done.
     model = Comment
     template_name = 'forum/update_comment.html'
     fields = ['body']
     
-    #HOW TO OVERWRITE DEFAULT GET SUCCESS URL
-    def get_success_url(self, **kwargs):
-        post_id = self.object.post.id #HOW TO GET POST ID FOR FUTHER USE TO REDIRECT BY PK                           
+    def get_success_url(self, **kwargs):   # How to overwrite default get success url.
+        post_id = self.object.post.id  # How to get post id for the further use to redirect by pk.                           
         return reverse('forum:post-detail', kwargs={'pk': post_id})
 
-class DeleteCommentView(DeleteView, LoginRequiredMixin): #done
+
+class DeleteCommentView(DeleteView, LoginRequiredMixin):  # Done.
     model = Comment
 
-    #HOW TO OVERWRITE DEFAULT GET SUCCESS URL
-    def get_success_url(self, **kwargs):
-        post_id = self.object.post.id #HOW TO GET POST ID FOR FUTHER USE TO REDIRECT BY PK                           
+    def get_success_url(self, **kwargs):  # How to overwrite default get success url.
+        post_id = self.object.post.id  # How to get post id for the further use to redirect by pk.                         
         return reverse('forum:post-detail', kwargs={'pk': post_id})
-    
+
+
 def post_detail(request, pk):
     post = Post.objects.get(id=pk)
     ied = pk
@@ -283,21 +296,19 @@ def post_detail(request, pk):
     }
     return render(request, 'forum/post_detail.html', context)
 
+
 def profile(request, username):
-    if request.method == "POST":
+    if request.method == 'POST':
         user = request.user
         form = UserUpdateForm(request.POST, request.FILES, instance = user)
         if form.is_valid():
             user_form = form.save()
             messages.success(request, f'{user_form.username}, your profile has been updated!')
-            return redirect('profile', user_form.username)
-        
+            return redirect('profile', user_form.username)        
         for error in list(form.errors.values()):
             messages.error(request, error)
-
     user = get_user_model().objects.filter(username=username).first()
     if user:
         form = UserUpdateForm(instance=user)
-        return render(request,'user/profile.html', {'form':form} )
-    
+        return render(request,'user/profile.html', {'form':form} )   
     return redirect('home')
