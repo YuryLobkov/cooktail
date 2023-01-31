@@ -298,6 +298,9 @@ def post_detail(request, pk):
 
 
 def profile(request, username):
+    count_user = get_user_model().objects.filter(username=username).first()
+    post_count = Post.objects.filter(author=count_user).count()
+    comment_count = Comment.objects.filter(comment_author=count_user).count()
     if request.method == 'POST':
         user = request.user
         form = UserUpdateForm(request.POST, request.FILES, instance = user)
@@ -310,5 +313,8 @@ def profile(request, username):
     user = get_user_model().objects.filter(username=username).first()
     if user:
         form = UserUpdateForm(instance=user)
-        return render(request,'user/profile.html', {'form':form} )   
-    return redirect('home')
+        
+        return render(request,'user/profile.html', {'form': form, 
+                                                    'post_count': post_count,
+                                                    'comment_count': comment_count})   
+    return redirect('start_page')

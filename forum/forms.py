@@ -43,10 +43,25 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
+        exclude = ('date_joined',)
+    
         fields = ['first_name',
                   'last_name',
                   'email',
-                  'image']
+                  'image',]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            style_data = {
+                'class': 'form-control',
+            }
+            self.fields[str(field)].widget.attrs.update(style_data)
+        self.fields['first_name'].widget.attrs.update({'placeholder' : 'First name',})
+        self.fields['last_name'].widget.attrs.update({'placeholder' : 'Last name'})
+        self.fields['email'].widget.attrs.update({'placeholder' : 'Email',
+                                                  'style': 'none'})
+        
 
 class PasswordChangeForm(SetPasswordForm):
     class Meta:
