@@ -9,6 +9,7 @@ from .forms import StorageForm, ToolsForm
 from django.http import HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
+from django.db.models import Count, Q
 
 # Create your views here.
 
@@ -164,6 +165,20 @@ class UserToolsDelete(DeleteView):
 class UserDrinksList(DrinksList):
     template_name = 'drinks/user_ing_cocktail_list.html'
     def get_queryset(self):
+
+        #V1 (not working correctly)
+        # allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
+        # print ('allowed ings         ',allowed_ings)
+        # forbidden_cocktails = Cocktail.objects.exclude(main_ingredients__in = allowed_ings).values_list('id')
+        # print ('forbiden cocktails   ',forbidden_cocktails)
+        # queryset = Cocktail.objects.exclude(id__in = forbidden_cocktails)# .values_list('id')
+        # print (queryset)
+        # return queryset
+
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
-        queryset = Cocktail.objects.filter(main_ingredients__in = allowed_ings)
-        return queryset
+        print(allowed_ings)
+        forbidden_ings = Ingredients.objects.exclude(id__in = allowed_ings).values_list('id')
+        print (forbidden_ings)
+        allowed_cocktails = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
+        print (allowed_cocktails)
+        return allowed_cocktails
