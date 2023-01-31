@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-header">
             <a style="text-decoration: blue;" href="{% url 'profile' user.username %}">
-                🐱‍👓(example profile pic) {{object.author}} | {{object.created_at | date:"F d, Y" }} at {{object.created_at | date:"H:i" }}
+                <img style="width: 50px;"src="{{object.author.image.url}}"> {{object.author}} | {{object.created_at | date:"F d, Y" }} at {{object.created_at | date:"H:i" }}
             </a>
         </div>
         <div class="card-body">
@@ -48,14 +48,14 @@
                     <li>           
                         <div>
                             <span>
-                                <strong class="">{{ comment.comment_author }} </strong>
+                                <strong class=""><img style="width: 50px;"src="{{comment.comment_author.image.url}}"> {{ comment.comment_author }} </strong>
                                 <small> | {{ comment.post_date | date:"F d, P, Y" }}</small>
                                 {% if comment.comment_author.id == user.id %}
                                     <small> <a style="text-decoration: none;" href="{% url 'forum:update-comment' comment.id %}">✏</a> </small>
                                     <small> <a style="text-decoration: none;" href="{% url 'forum:delete-comment' comment.id %}">❌</a> </small>
                                 {% endif %}
                             </span>
-                            <p>{{ comment.body|safe }}</p>
+                            <p class="mt-2">{{ comment.body|safe }}</p>
                         </div>
                     </li>
                 {% endfor %}
