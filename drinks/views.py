@@ -176,17 +176,40 @@ class UserDrinksList(DrinksList):
         # print (queryset)
         # return queryset
 
+        # 1. find Allowed by main ings
+        # 2. find forbidden by tools from 1
+        # 3. find allowed by opt ings from 1
+        # 4. exclude 2 from 1
+        # 5. exclude 3 from 1
+        # 6. combine 2+3 (in template)
+
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
         forbidden_ings = Ingredients.objects.exclude(id__in = allowed_ings).values_list('id')
+        allowed_tools = UserTools.objects.filter(user_id = self.request.user.id).values_list('user_inventory')
+        #1
         allowed_cocktails_by_main_ings = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
+        #2
+        forbiden_cocktails_by_tools = allowed_cocktails_by_main_ings.exclude(tools__in = allowed_tools)
+        #3
         allowed_cocktails = allowed_cocktails_by_main_ings.exclude(optional_ingredients__in = forbidden_ings)
+        #4
+        allowed_cocktails = allowed_cocktails.exclude(id__in = forbiden_cocktails_by_tools)
+        #5
         allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = allowed_cocktails)
+        #6
+
+        
         missing_opt_ings_id = allowed_cocktails_by_main_ings.values_list('optional_ingredients')
         missing_opt_ings = Ingredients.objects.filter(id__in = missing_opt_ings_id)
+        missing_tools_id = forbiden_cocktails_by_tools.values_list('tools').exclude(id__in = allowed_tools)
+        missing_tools = Inventory.objects.filter(id__in = missing_tools_id)
+        print(missing_tools)
 
         queryset = {
             'by_main' : allowed_cocktails_by_main_ings,
             'by_all' : allowed_cocktails,
+            'by_tools' : forbiden_cocktails_by_tools,
             'missing_opt_ings': missing_opt_ings,
+            # 'missing_tools' : ,
         }
         return queryset
