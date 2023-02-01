@@ -31,6 +31,11 @@
 <div class="container glass-layout">
     <div class="list-menu">
         <h1 class='text-center font-weight-bold'>This is what you almost can make</h1>
+        <h3>If you find someware:
+            {% for opt_ingredient in cocktail_list.missing_opt_ings %}
+                {{opt_ingredient}}
+            {% endfor %}
+        </h3>
     </div>
 </div>
 <div class="container glass-layout grid-wrap">

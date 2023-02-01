@@ -181,9 +181,13 @@ class UserDrinksList(DrinksList):
         allowed_cocktails_by_main_ings = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
         allowed_cocktails = allowed_cocktails_by_main_ings.exclude(optional_ingredients__in = forbidden_ings)
         allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = allowed_cocktails)
+        print(allowed_cocktails_by_main_ings.values_list('optional_ingredients'))
+        missing_opt_ings_id = allowed_cocktails_by_main_ings.values_list('optional_ingredients')
+        missing_opt_ings = Ingredients.objects.filter(id__in = missing_opt_ings_id)
 
         queryset = {
             'by_main' : allowed_cocktails_by_main_ings,
-            'by_all' : allowed_cocktails
+            'by_all' : allowed_cocktails,
+            'missing_opt_ings': missing_opt_ings,
         }
         return queryset
