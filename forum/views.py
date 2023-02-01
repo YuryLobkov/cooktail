@@ -57,7 +57,6 @@ def email_activate(request, user, to_email):
     message = get_template('user/email_template_account_activation.html').render(data_context)
     email = EmailMessage(subject, message, to=[to_email])
     email.content_subtype = 'html'
-    email.send()
     if email.send():
         messages.success(request, f'<b>{user}</b>, to complete the registration, \
                          you need to pass <b>email confirmation.</b> \n Please, go \
@@ -123,7 +122,6 @@ def password_reset(request):
                 message = get_template('user/email_template_password_reset.html').render(data_context)
                 email = EmailMessage(subject, message, to=[associated_user.email])
                 email.content_subtype = 'html'
-                email.send()
                 if email.send():
                     messages.success(request, 
                         """

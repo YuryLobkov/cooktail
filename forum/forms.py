@@ -36,7 +36,7 @@ class UserLoginForm(AuthenticationForm):
         attrs={'class':'form-control',
                'placeholder':'Password'}))
     
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+    # captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
