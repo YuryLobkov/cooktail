@@ -164,6 +164,7 @@ class UserToolsDelete(DeleteView):
 
 class UserDrinksList(DrinksList):
     template_name = 'drinks/user_ing_cocktail_list.html'
+    context_object_name = 'cocktail_list'
     def get_queryset(self):
 
         #V1 (not working correctly)
@@ -176,9 +177,12 @@ class UserDrinksList(DrinksList):
         # return queryset
 
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
-        print(allowed_ings)
         forbidden_ings = Ingredients.objects.exclude(id__in = allowed_ings).values_list('id')
-        print (forbidden_ings)
-        allowed_cocktails = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
-        print (allowed_cocktails)
-        return allowed_cocktails
+        allowed_cocktails_by_main_ings = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
+
+
+        queryset = {
+            'by_main' : allowed_cocktails_by_main_ings,
+            # 'by_all' : allowed_cocktails
+        }
+        return queryset
