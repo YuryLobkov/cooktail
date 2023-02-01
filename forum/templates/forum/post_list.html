@@ -11,9 +11,8 @@
 {% if posts %}
     {% for post in page_obj %}
         <div class="card border-bg-secondary mb-3" >
-            <div class="card-header">
-                
-                <a style="text-decoration: blue;" href="{% url 'profile' post.author %}"><img style="width: 50px;"src="{{post.author.image.url}}" alt="">  @{{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H:i" }}</a>
+            <div class="card-header">      
+                <a style="text-decoration: blue;" href="{% url 'profile' post.author %}"><img class="rounded-circle" style="width: 50px; height: 50px;" src="{{post.author.image.url}}">  @{{post.author}} | {{post.created_at | date:"F d, Y" }} at {{post.created_at | date:"H:i" }}</a>
             </div>
             <a style="text-decoration: none; color: black;" target="_top" href="{% url 'forum:post-detail' post.id %}">         
                 <div class="card-body">

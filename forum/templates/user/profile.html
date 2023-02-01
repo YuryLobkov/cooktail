@@ -11,7 +11,7 @@
                     <div class="col-sm-4 mt-2 text-center">
                         <h3>@{{form.instance.username}}</h3>
                         <label for="id_image">
-                            <img style="width: 150px;" class="rounded-circle account-img profile-image" 
+                            <img style="width: 150px; height: 150px;" class="rounded-circle account-img profile-image" 
                                 style="cursor: pointer;" src="{{ form.instance.image.url }}" title="Upload new image">
                         </label>
                         <input class="btn btn-sm btn-success sm mb-2 mt-2" id="id_image" type="file" name="image"/>
@@ -24,11 +24,9 @@
                         </br>
                         </br>
                         </br>
-                        </br>
                         {{form.first_name|as_crispy_field}}
                     </div>
                     <div class="col">
-                        </br>
                         </br>
                         </br>
                         </br>
@@ -73,7 +71,7 @@
                         <div class="text-center">
                             <a style="text-decoration: none;" href="{% url 'password_change' %}">Change password?</a>
                             </br>
-                        </br>
+                            </br>
                             <p><button class="btn btn-success" type="submit">Update profile</button></p>
                         </div>
                     </div>
