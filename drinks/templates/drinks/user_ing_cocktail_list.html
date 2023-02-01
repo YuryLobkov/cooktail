@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {%block content%}
 {% if cocktail_list.by_all %}
-missing tools{{cocktail_list.missing_tools}} <br>
-missing ings {{cocktail_list.missing_opt_ings}}
     <div class="container glass-layout">
         <div class="list-menu">
             <h1 class='text-center font-weight-bold'>This is what u can make right now!</h1>
@@ -47,7 +45,7 @@ missing ings {{cocktail_list.missing_opt_ings}}
         </div>
     </div>
     <div class="container glass-layout grid-wrap">
-        {%comment%}{% for cocktail in cocktail_list.by_main %}
+        {% for cocktail in cocktail_list.by_main %}
                 <div class="card mb-3 card-cocktail" style="max-width: 540px;">
                     <div class="row g-0 card-img-custom">
                     <div class="col-md-4 card-img-custom2">
@@ -71,7 +69,6 @@ missing ings {{cocktail_list.missing_opt_ings}}
                     </div>
                 </div>
             {% endfor %}
-            {%endcomment%}
             {% for cocktail in cocktail_list.by_tools %}
                 <div class="card mb-3 card-cocktail" style="max-width: 540px;">
                     <div class="row g-0 card-img-custom">
