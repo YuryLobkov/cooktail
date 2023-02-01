@@ -181,7 +181,7 @@ class UserDrinksList(DrinksList):
         # 3. find allowed by opt ings from 1
         # 4. exclude 2 from 1
         # 5. exclude 3 from 1
-        # 6. combine 2+3 (in template)
+        # 6. combine 2+3 (in template) and delete dublicats (in views)
 
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
         forbidden_ings = Ingredients.objects.exclude(id__in = allowed_ings).values_list('id')
@@ -197,19 +197,18 @@ class UserDrinksList(DrinksList):
         #5
         allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = allowed_cocktails)
         #6
-
+        allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = forbiden_cocktails_by_tools)
         
         missing_opt_ings_id = allowed_cocktails_by_main_ings.values_list('optional_ingredients')
         missing_opt_ings = Ingredients.objects.filter(id__in = missing_opt_ings_id)
         missing_tools_id = forbiden_cocktails_by_tools.values_list('tools').exclude(id__in = allowed_tools)
         missing_tools = Inventory.objects.filter(id__in = missing_tools_id)
-        print(missing_tools)
 
         queryset = {
             'by_main' : allowed_cocktails_by_main_ings,
             'by_all' : allowed_cocktails,
             'by_tools' : forbiden_cocktails_by_tools,
             'missing_opt_ings': missing_opt_ings,
-            # 'missing_tools' : ,
+            'missing_tools' : missing_tools,
         }
         return queryset
