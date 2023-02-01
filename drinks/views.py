@@ -176,9 +176,9 @@ class UserDrinksList(DrinksList):
         # print (queryset)
         # return queryset
 
-        # 1. find Allowed by main ings
+        # 1. find Allowed by main ings (missing opt)
         # 2. find forbidden by tools from 1
-        # 3. find allowed by opt ings from 1
+        # 3. find allowed by opt ings from 1 (have all)
         # 4. exclude 2 from 1
         # 5. exclude 3 from 1
         # 6. combine 2+3 (in template) and delete dublicats (in views)
@@ -193,11 +193,12 @@ class UserDrinksList(DrinksList):
         #3
         allowed_cocktails = allowed_cocktails_by_main_ings.exclude(optional_ingredients__in = forbidden_ings)
         #4
-        allowed_cocktails = allowed_cocktails.exclude(id__in = forbiden_cocktails_by_tools)
+        allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = forbiden_cocktails_by_tools)
         #5
         allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = allowed_cocktails)
         #6
-        allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = forbiden_cocktails_by_tools)
+        allowed_cocktails = allowed_cocktails.exclude(id__in = forbiden_cocktails_by_tools)
+        # forbiden_cocktails_by_tools = forbiden_cocktails_by_tools.exclude(id__in = allowed_cocktails_by_main_ings)
         
         missing_opt_ings_id = allowed_cocktails_by_main_ings.values_list('optional_ingredients')
         missing_opt_ings = Ingredients.objects.filter(id__in = missing_opt_ings_id)

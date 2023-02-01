@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {%block content%}
 {% if cocktail_list.by_all %}
+missing tools{{cocktail_list.missing_tools}} <br>
+missing ings {{cocktail_list.missing_opt_ings}}
     <div class="container glass-layout">
         <div class="list-menu">
             <h1 class='text-center font-weight-bold'>This is what u can make right now!</h1>
@@ -45,7 +47,7 @@
         </div>
     </div>
     <div class="container glass-layout grid-wrap">
-            {% for cocktail in cocktail_list.by_main %}
+        {%comment%}{% for cocktail in cocktail_list.by_main %}
                 <div class="card mb-3 card-cocktail" style="max-width: 540px;">
                     <div class="row g-0 card-img-custom">
                     <div class="col-md-4 card-img-custom2">
@@ -69,6 +71,7 @@
                     </div>
                 </div>
             {% endfor %}
+            {%endcomment%}
             {% for cocktail in cocktail_list.by_tools %}
                 <div class="card mb-3 card-cocktail" style="max-width: 540px;">
                     <div class="row g-0 card-img-custom">
@@ -86,14 +89,15 @@
                                     {{tool}}
                                 {% endif %}
                             {% endfor %} <br>
-                            {% if ingredient in cocktail.optional_ingredients.all %}
+                            {%comment%}{% if cocktail_list.missing_opt_ings in cocktail.optional_ingredients.all %}{%endcomment%}
                                 Missing ingredients:
                                 {% for ingredient in cocktail.optional_ingredients.all %}
                                     {% if ingredient in cocktail_list.missing_opt_ings %}
                                         {{ingredient}}
                                     {% endif %}
                                 {% endfor %}
-                            {% endif %} <br>
+                                {%comment%}<!-- {% endif %} -->{%endcomment%}
+                             <br>
                         <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
                         </small></p>
                         </div>
