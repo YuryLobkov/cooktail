@@ -179,10 +179,11 @@ class UserDrinksList(DrinksList):
         allowed_ings = UserStorage.objects.filter(user_id = self.request.user.id).values_list('user_ingredients')
         forbidden_ings = Ingredients.objects.exclude(id__in = allowed_ings).values_list('id')
         allowed_cocktails_by_main_ings = Cocktail.objects.exclude(main_ingredients__in = forbidden_ings)
-
+        allowed_cocktails = allowed_cocktails_by_main_ings.exclude(optional_ingredients__in = forbidden_ings)
+        allowed_cocktails_by_main_ings = allowed_cocktails_by_main_ings.exclude(id__in = allowed_cocktails)
 
         queryset = {
             'by_main' : allowed_cocktails_by_main_ings,
-            # 'by_all' : allowed_cocktails
+            'by_all' : allowed_cocktails
         }
         return queryset
