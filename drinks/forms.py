@@ -43,12 +43,16 @@ class CreateCocktail(forms.ModelForm):
 
 
 class StorageForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(StorageForm, self).__init__(*args, **kwargs)
+        self.fields['user_ingredients'].label = ""
+    
+    
     class Meta:
         model = UserStorage
         fields = ['user_ingredients']
-    helper = FormHelper()
-    helper.form_class = 'form-group'
-    helper.layout = Layout(Field('body',css_class='form-control mt-2 mb-3'))
+        widgets = {'user_ingredients': forms.Select(attrs={'class': 'form-control'})}
 
 
 class ToolsForm(forms.ModelForm):
