@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {%block content%}
-<h1>Add new tools and tableware to the list</h1>
-<form method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Create">
-</form>
+<div class="container glass-layout centered">
+    <h1 class="text-light">Add new tools and tableware to the list</h1>
+    <form method="POST"> {% csrf_token %}
+        <div class="form-group">
+            <table class="mx-auto">
+                {{ form.as_table }}
+            </table>
+        </div>
+        
+        <input class="btn btn-success mt-1" type="submit" value="Create">
+    </form>
+</div>
+
+
 {%endblock%}

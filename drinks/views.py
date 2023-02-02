@@ -5,7 +5,7 @@ from django.views.generic import (TemplateView, ListView,
                                 DetailView, FormView)
 from .models import Cocktail, Ingredients, Inventory, UserStorage, UserTools
 from django.urls import reverse_lazy, reverse
-from .forms import StorageForm, ToolsForm, CreateCocktail, CreateIng
+from .forms import StorageForm, ToolsForm, CreateCocktail, CreateIng, CreateInventory
 from django.http import HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
@@ -52,7 +52,7 @@ class InventoryList(ListView):
 
 class InventoryCreate(CreateView):
     model = Inventory
-    fields = '__all__'
+    form_class = CreateInventory
     success_url = reverse_lazy('drinks:inventory_list')
 
 

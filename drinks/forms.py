@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserStorage, Ingredients, UserTools, Cocktail
+from .models import UserStorage, Ingredients, UserTools, Cocktail, Inventory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
@@ -13,7 +13,16 @@ class CreateIng(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'ing_type': forms.Select(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5})
+        }
+
+class CreateInventory(forms.ModelForm):
+    class Meta:
+        model = Inventory
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'inv_type': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class CreateCocktail(forms.ModelForm):
