@@ -5,7 +5,16 @@ from crispy_forms.layout import Layout, Field
 
 class CustomSelectMultiple(forms.CheckboxSelectMultiple):
     option_inherits_attrs = False
-    
+
+class CreateIng(forms.ModelForm):
+    class Meta:
+        model = Ingredients
+        fields= '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'ing_type': forms.Select(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
 
 class CreateCocktail(forms.ModelForm):
     class Meta:
