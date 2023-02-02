@@ -2,13 +2,13 @@
 {%block content%}
 <div class="container glass-layout centered">
     <h1 class="text-light">Create new mix!</h1>
-    <div class="centered">
+    <div class="centered mb-4">
         <a class='btn btn-secondary' href="{% url 'drinks:add_ingredient' %}">Add ingredients</a>
         <a class='btn btn-secondary' href="{% url 'drinks:add_inventory' %}">Add inventory</a>
     </div>
     <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
         <div class="form-group">
-            <table>
+            <table class="mx-auto">
                 {{ form.as_table}}
             </table>
             <input type="submit" value="Create">
