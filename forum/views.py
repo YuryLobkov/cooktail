@@ -88,7 +88,7 @@ def sign_up(request):
         form = RegistrationForm()
     return render(request, 'user/sign_up.html', context={'form':form})
 
-
+@login_required
 def password_change(request):
     user = request.user
     if request.method == 'POST':

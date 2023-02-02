@@ -6,7 +6,7 @@
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container glass-layout text-white">
-                <div class="row">
+                <div class="row"  style="height: 300px;">
                     <!-- PROFILE PIC -->
                     <div class="col-sm-4 mt-2 text-center">
                         <h3>@{{form.instance.username}}</h3>
@@ -18,26 +18,16 @@
                         <button class="btn btn-sm btn-success sm mb-4" type="submit">Update your profile pic</button>
                     </div>
                     <!-- PROFILE FIRST NAME -->
-                    <div class="col">
-                        </br>
-                        </br>
-                        </br>
-                        </br>
-                        </br>
+                    <div class="col" style="margin-top: 200px">
                         {{form.first_name|as_crispy_field}}
                     </div>
-                    <div class="col">
-                        </br>
-                        </br>
-                        </br>
-                        </br>
-                        </br>
+                    <div class="col" style="margin-top: 200px">
                         {{form.last_name|as_crispy_field}}
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="height: 300px;">
                     <!-- PROFILE INFORMATION -->
-                    <div class="col-sm-4 mt-2" >
+                    <div class="col-sm-4" style="margin-top: 55px;" >
                         <table class="table table-borderless text-white">
                             <tbody>
                             <tr>
@@ -68,10 +58,10 @@
                     <!-- PROFILE EMAIL AND BUTTONS SECTION -->
                     <div class="col">
                         {{form.email|as_crispy_field}}
-                        <div class="text-center">
-                            <a style="text-decoration: none;" href="{% url 'password_change' %}">Change password?</a>
-                            </br>
-                            </br>
+                        <div class="text-center mt-3">
+                            <a class="mb-5" style="text-decoration: none;" href="{% url 'password_change' %}">Change password?</a>
+                        </div>
+                        <div class="text-center mt-3">
                             <p><button class="btn btn-success" type="submit">Update profile</button></p>
                         </div>
                     </div>
