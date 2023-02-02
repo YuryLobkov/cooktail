@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {%block content%}
 <div class="container glass-layout">
-    <div class="list-menu">
+    <div class="list-menu centered">
         <h1 class='text-center font-weight-bold'>Cocktails</h1>
-        <a class="btn btn-primary bg-secondary" href="{% url 'drinks:add_cocktail' %}">Add</a>
+        <a class="btn btn-secondary mx-auto" href="{% url 'drinks:add_cocktail' %}">Add new cocktail</a>
     </div>
 </div>
 <div class="container glass-layout grid-wrap">
