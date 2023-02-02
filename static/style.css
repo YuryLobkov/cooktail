@@ -104,8 +104,8 @@ footer{
 h1{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     justify-self: center;
-    color:rgb(58, 58, 58);
-    text-shadow: 3px 3px 8px rgb(255, 255, 255), -3px -3px 8px rgb(255, 255, 255), 1px 1px 30px rgb(0, 0, 0);;
+    /* color:rgb(58, 58, 58); */
+    /* text-shadow: 3px 3px 8px rgb(255, 255, 255), -3px -3px 8px rgb(255, 255, 255), 1px 1px 30px rgb(0, 0, 0);; */
     /* width: 300; */
     /* background-color: rgba(70, 70, 70, 0.329); */
     border-radius: 10px;

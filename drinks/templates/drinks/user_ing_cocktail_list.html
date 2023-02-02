@@ -3,7 +3,7 @@
 {% if cocktail_list.by_all %}
     <div class="container glass-layout">
         <div class="list-menu">
-            <h1 class='text-center font-weight-bold'>This is what u can make right now!</h1>
+            <h1 class=''>This is what u can make right now!</h1>
         </div>
     </div>
     <div class="container glass-layout grid-wrap">
@@ -33,7 +33,7 @@
 {% if cocktail_list.missing_opt_ings %}
     <div class="container glass-layout">
         <div class="list-menu">
-            <h1 class='text-center font-weight-bold'>This is what you almost can make</h1>
+            <h1 class=''>This is what you almost can make</h1>
             <h3>If you find someware:
                 {% for opt_ingredient in cocktail_list.missing_opt_ings %}
                     {{opt_ingredient}}
