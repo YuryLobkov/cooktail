@@ -16,6 +16,7 @@ class CreateIng(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5})
         }
 
+
 class CreateInventory(forms.ModelForm):
     class Meta:
         model = Inventory
@@ -39,7 +40,6 @@ class CreateCocktail(forms.ModelForm):
             'recepie': forms.Textarea(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control-lg'}),
         }
-    
 
 
 class StorageForm(forms.ModelForm):
@@ -56,9 +56,13 @@ class StorageForm(forms.ModelForm):
 
 
 class ToolsForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(ToolsForm, self).__init__(*args, **kwargs)
+        self.fields['user_inventory'].label = ""    
+    
+    
     class Meta:
         model = UserTools
         fields = ['user_inventory']
-    helper = FormHelper()
-    helper.form_class = 'form-group'
-    helper.layout = Layout(Field('body',css_class='form-control mt-2 mb-3'))
+        widgets = {'user_inventory': forms.Select(attrs={'class': 'form-control'})}
