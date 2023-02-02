@@ -86,14 +86,25 @@
                                     {{tool}}
                                 {% endif %}
                             {% endfor %} <br>
-                            {%comment%}{% if cocktail_list.missing_opt_ings in cocktail.optional_ingredients.all %}{%endcomment%}
+
+                            {% for cocktail_ing in cocktail.optional_ingredients.all %}
+                                {% if cocktail_ing in cocktail_list.missing_opt_ings %}
                                 Missing ingredients:
-                                {% for ingredient in cocktail.optional_ingredients.all %}
-                                    {% if ingredient in cocktail_list.missing_opt_ings %}
-                                        {{ingredient}}
-                                    {% endif %}
-                                {% endfor %}
-                                {%comment%}<!-- {% endif %} -->{%endcomment%}
+
+                                {% comment %} 'Break' loop below {% endcomment %}
+                                {{ "<!--" }}
+                                {% else %}
+                                {{ "<!--" }}        
+                                {% endif %}                            
+                            {% endfor %}
+                            {{ "-->" }}
+
+
+                            {% for ingredient in cocktail.optional_ingredients.all %}
+                                {% if ingredient in cocktail_list.missing_opt_ings %}
+                                    {{ingredient }}
+                                {% endif %}
+                            {% endfor %}
                              <br>
                         <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
                         </small></p>
