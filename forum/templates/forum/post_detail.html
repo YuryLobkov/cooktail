@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">{{object.title}}</h5>
-            <p class="card-text">{{object.content}}</p>
+            <p class="card-text">{{object.content|safe}}</p>
         </div>
             {% if user == object.author %}
                 <div class="card-footer">

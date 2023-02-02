@@ -17,7 +17,7 @@
             <a style="text-decoration: none; color: black;" target="_top" href="{% url 'forum:post-detail' post.id %}">         
                 <div class="card-body">
                     <h5 class="card-title">{{post.title}}</h5>
-                    <p class="card-text">{{post.content}}</p>
+                    <p class="card-text">{{post.content|safe}}</p>
                 </div>
                 <div class="card-footer">
                     {% if comments and post.num_of_comments != 0 %}

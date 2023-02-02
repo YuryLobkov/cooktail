@@ -18,7 +18,10 @@ from django.urls import path, include
 from .views import start_redirect_view
 from django.conf.urls.static import static
 from django.conf import settings
-from forum.views import sign_up, custom_login, custom_logout, profile, activate, password_change, password_reset, password_reset_confirm
+from django.conf.urls import handler404
+from forum.views import sign_up, custom_login, custom_logout, profile, \
+                        activate, password_change, password_reset, \
+                        password_reset_confirm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,3 +38,5 @@ urlpatterns = [
     path('reset/<uidb64>/<token>', password_reset_confirm, name='password_reset_confirm'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "forum.views.error_404"    

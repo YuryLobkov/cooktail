@@ -25,6 +25,7 @@ from django.contrib.auth import get_user_model
 from .forms import UserLoginForm
 from django.contrib import messages
 from django.template import Context
+from .decorators import user_is_not_authenticated
 
 # Create your views here.
 def activate(request, uidb64, token):
@@ -104,6 +105,7 @@ def password_change(request):
     return render(request, 'user/password_change_confirmation.html', {'form':form})
 
 
+@user_is_not_authenticated
 def password_reset(request):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
@@ -316,3 +318,7 @@ def profile(request, username):
                                                     'post_count': post_count,
                                                     'comment_count': comment_count})   
     return redirect('start_page')
+
+
+def error_404(request, exception):
+    return render(request, '404.html')

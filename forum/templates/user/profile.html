@@ -18,16 +18,16 @@
                         <button class="btn btn-sm btn-success sm mb-4" type="submit">Update your profile pic</button>
                     </div>
                     <!-- PROFILE FIRST NAME -->
-                    <div class="col" style="margin-top: 200px">
+                    <div class="col" style="margin-top: 200px; margin-right: 40px;">
                         {{form.first_name|as_crispy_field}}
                     </div>
-                    <div class="col" style="margin-top: 200px">
+                    <div class="col" style="margin-top: 200px; margin-right: 40px;">
                         {{form.last_name|as_crispy_field}}
                     </div>
                 </div>
                 <div class="row" style="height: 300px;">
                     <!-- PROFILE INFORMATION -->
-                    <div class="col-sm-4" style="margin-top: 55px;" >
+                    <div class="col-sm-4" style="margin-top: 55px;">
                         <table class="table table-borderless text-white">
                             <tbody>
                             <tr>
@@ -56,7 +56,7 @@
                         </table>
                     </div> 
                     <!-- PROFILE EMAIL AND BUTTONS SECTION -->
-                    <div class="col">
+                    <div class="col" style="margin-right: 40px;">
                         {{form.email|as_crispy_field}}
                         <div class="text-center mt-3">
                             <a class="mb-5" style="text-decoration: none;" href="{% url 'password_change' %}">Change password?</a>
