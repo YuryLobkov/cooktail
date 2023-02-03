@@ -194,6 +194,13 @@ class UserDrinksList(DrinksList):
         missing_opt_ings = Ingredients.objects.filter(id__in = forbidden_ings) #all of ings, exclude having. Filtered in template
         missing_tools_id = forbiden_cocktails_by_tools.values_list('tools').exclude(id__in = allowed_tools)
         missing_tools = Inventory.objects.filter(id__in = missing_tools_id)
+        
+        missing_opt_ings_total_by_cocktails = []
+        for missing_ing in missing_opt_ings.values_list('id'):
+            if missing_ing in allowed_cocktails_by_main_ings.values_list('optional_ingredients') or missing_ing in forbiden_cocktails_by_tools.values_list('optional_ingredients'):
+                missing_opt_ings_total_by_cocktails.extend(missing_ing)
+        missing_opt_ings_total_by_cocktails = missing_opt_ings.filter(id__in = missing_opt_ings_total_by_cocktails)
+        print (missing_opt_ings_total_by_cocktails)
 
         queryset = {
             'by_main' : allowed_cocktails_by_main_ings,
@@ -201,5 +208,6 @@ class UserDrinksList(DrinksList):
             'by_tools' : forbiden_cocktails_by_tools,
             'missing_opt_ings': missing_opt_ings,
             'missing_tools' : missing_tools,
+            'missing_opt_ings_total_by_cocktails': missing_opt_ings_total_by_cocktails,
         }
         return queryset
