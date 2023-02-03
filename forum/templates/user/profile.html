@@ -1,0 +1,89 @@
+{% extends 'forum/base.html' %}
+{% block title %}Create post{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+    {% if user.username == form.instance.username %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container glass-layout text-white">
+                <div class="row"  style="height: 300px;">
+                    <!-- PROFILE PIC -->
+                    <div class="col-sm-4 mt-2 text-center">
+                        <h3>@{{form.instance.username}}</h3>
+                        <label for="id_image">
+                            <img style="width: 150px; height: 130px;" class="rounded-circle account-img profile-image mb-2" 
+                                style="cursor: pointer;" src="{{ form.instance.image.url }}" title="Upload new image">
+                        </label>
+                        <input class="btn btn-sm btn-success sm mb-2 mt-2" id="id_image" type="file" name="image"/>
+                        <button class="btn btn-sm btn-success sm mb-4" type="submit">Update your profile pic</button>
+                    </div>
+                    <!-- PROFILE FIRST NAME -->
+                    <div class="col" style="margin-top: 200px; margin-right: 40px;">
+                        {{form.first_name|as_crispy_field}}
+                    </div>
+                    <div class="col" style="margin-top: 200px; margin-right: 40px;">
+                        {{form.last_name|as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row" style="height: 300px;">
+                    <!-- PROFILE INFORMATION -->
+                    <div class="col-sm-4" style="margin-top: 55px;">
+                        <table class="table table-borderless text-white">
+                            <tbody>
+                            <tr>
+                                <th scope="row">First name</th>
+                                <td class="text-center" colspan="2">{{form.instance.first_name}}</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Last name</th>
+                                <td class="text-center" colspan="2">{{form.instance.last_name}}</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Joined</th>
+                                <td class="text-center" colspan="2">{{form.instance.date_joined|date:"d M Y"}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Posts created</th>
+                                <td class="text-center" colspan="2">{{post_count}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Comments leaved</th>
+                                <td class="text-center" colspan="2">{{comment_count}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <!-- PROFILE EMAIL AND BUTTONS SECTION -->
+                    <div class="col" style="margin-right: 40px;">
+                        {{form.email|as_crispy_field}}
+                        <div class="text-center mt-3">
+                            <a class="mb-5" style="text-decoration: none;" href="{% url 'password_change' %}">Change password?</a>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p><button class="btn btn-success" type="submit">Update profile</button></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% else %}
+        <!-- PROFILE VIEW FOR NON AUTHENTICATED USER -->
+        <div class="container card glass-layout text-white" style="width: 350; height: 500;">
+            <legend class="border-bottom mb-4">Profile Information:</legend>
+            <div class="text-center">
+                <img style="width: 150px;" class="rounded-circle account-img profile-image mb-4" src="{{ form.instance.image.url }}">
+                <h2 class="mb-4">@{{form.instance.username}}</h2>
+            </div>
+            <div style="margin-left: 20px;">
+                <p class="mb-3">First name: <strong>{{form.instance.first_name}}</strong></p>
+                <p class="mb-3">Last name: <strong>{{form.instance.last_name}}</strong></p>
+                <p class="mb-3">Joined: <strong>{{form.instance.date_joined|date:"d M Y"}}</strong></p>
+                <p class="mb-3">Posts created: <strong>{{post_count}}</strong></p>
+                <p class="mb-3">Comments leaved: <strong>{{comment_count}}</strong></p>
+
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

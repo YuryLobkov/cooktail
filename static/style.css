@@ -58,7 +58,7 @@ body{
     display: flex;
     font-family: Neonderthaw;
     font-size: 2em;
-    color: rgb(247, 0, 255);
+    color: rgb(103, 83, 104);
     text-shadow: 1px 1px 1px rgba(172, 255, 47, 0.192);
     padding: 0;
     align-items: center;
@@ -72,7 +72,6 @@ body{
 }
 
 .logo-green{
-    background-color: black;
     border-radius: 20px;
     max-width: 580px;
     transition: 2s;
@@ -132,3 +131,10 @@ h1{
         transform:rotate(360deg);
     }
 }
+
+/* 
+.profile-image{
+    width: 125px;
+    height: 100px;
+    padding: 5px;
+} */
