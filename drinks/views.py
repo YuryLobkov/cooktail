@@ -44,7 +44,7 @@ class IngredientsList(ListView):
 class IngredientsCreate( LoginRequiredMixin, CreateView):
     model = Ingredients
     form_class = CreateIng
-    success_url = reverse_lazy('drinks:ingredients')
+    success_url = reverse_lazy('drinks:add_cocktail')
 
 
 class InventoryList(ListView):
@@ -54,7 +54,7 @@ class InventoryList(ListView):
 class InventoryCreate(LoginRequiredMixin, CreateView):
     model = Inventory
     form_class = CreateInventory
-    success_url = reverse_lazy('drinks:inventory_list')
+    success_url = reverse_lazy('drinks:add_cocktail')
 
 
 class UserStorageList(ListView):
