@@ -16,13 +16,18 @@ body{
     background-color: rgba(240, 248, 255, 0.685);
 }
 
+.card-cocktail{
+    width: 540px;
+    justify-self: center;
+}
+
 .spacing{
     height: 70px;
 }
 
 .list-menu{
     margin: 10px;
-    font-family: Lobster, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: beige;
     text-shadow: 2px 2px black;
 }
@@ -94,6 +99,39 @@ footer{
 .viewport{
     min-height: 90vh;
 }
+
+h1{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    justify-self: center;
+    /* color:rgb(58, 58, 58); */
+    /* text-shadow: 3px 3px 8px rgb(255, 255, 255), -3px -3px 8px rgb(255, 255, 255), 1px 1px 30px rgb(0, 0, 0);; */
+    /* width: 300; */
+    /* background-color: rgba(70, 70, 70, 0.329); */
+    border-radius: 10px;
+}
+
+.custom-form-field{
+    max-width: 500px;
+    background-color: rgba(240, 248, 255, 0.719);
+}
+
+.spinner{
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+}
+
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
 /* 
 .profile-image{
     width: 125px;

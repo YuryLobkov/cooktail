@@ -1,6 +1,8 @@
 from django.db import models
 import os
 from uuid import uuid4
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -54,7 +56,6 @@ class Inventory(models.Model):
 
 
 class Cocktail(models.Model):
-    #id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     name = models.CharField(max_length=30, unique=True)
     group = models.ForeignKey('GroupsCocktail', on_delete=models.CASCADE)
     volume = models.SmallIntegerField()
@@ -68,3 +69,23 @@ class Cocktail(models.Model):
     def __str__(self):
         return f'{self.name},{self.group},{self.volume}%'
 
+class UserStorage(models.Model):
+    user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user_ingredients = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user_id', 'user_ingredients')
+
+    def __str__(self):
+        return f'{self.user_id}, {self.user_ingredients}'
+
+
+class UserTools(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user_inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'user_inventory')
+
+    def __str__(self):
+        return f'{self.user}, {self.user_inventory}'
