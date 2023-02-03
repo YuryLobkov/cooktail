@@ -10,6 +10,7 @@ from django.http import HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -21,7 +22,7 @@ class DrinksList(ListView):
     model = Cocktail
 
 
-class DrinksCreate(CreateView):
+class DrinksCreate(LoginRequiredMixin, CreateView):
     model = Cocktail
     form_class = CreateCocktail
     success_url = reverse_lazy('drinks:cocktail_list')
@@ -40,20 +41,20 @@ class IngredientsList(ListView):
     model = Ingredients
 
 
-class IngredientsCreate(CreateView):
+class IngredientsCreate( LoginRequiredMixin, CreateView):
     model = Ingredients
     form_class = CreateIng
-    success_url = reverse_lazy('drinks:ingredients')
+    success_url = reverse_lazy('drinks:add_cocktail')
 
 
 class InventoryList(ListView):
     model = Inventory
 
 
-class InventoryCreate(CreateView):
+class InventoryCreate(LoginRequiredMixin, CreateView):
     model = Inventory
     form_class = CreateInventory
-    success_url = reverse_lazy('drinks:inventory_list')
+    success_url = reverse_lazy('drinks:add_cocktail')
 
 
 class UserStorageList(ListView):
