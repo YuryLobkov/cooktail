@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, CreateView, DeleteView
 from django.core.paginator import Paginator
+from django.contrib.messages.views import SuccessMessageMixin
 """
 IMPORT FROM PROJECT FILES
 """
@@ -241,17 +242,6 @@ class DeletePostView(DeleteView, LoginRequiredMixin):  # Done.
     success_url = '/forum/posts'
 
 
-class CreateCommentView(CreateView, LoginRequiredMixin):  # Done.
-    
-    model = Comment
-    template_name = 'forum/create_comment.html'
-    fields = ['body']
-
-    def form_valid(self, form):
-        form.instance.comment_author = self.request.user
-        return super().form_valid(form)
-
-
 class UpdateCommentView(UpdateView, LoginRequiredMixin):  # Done.
     model = Comment
     template_name = 'forum/update_comment.html'
@@ -262,13 +252,15 @@ class UpdateCommentView(UpdateView, LoginRequiredMixin):  # Done.
         return reverse('forum:post-detail', kwargs={'pk': post_id})
 
 
-class DeleteCommentView(DeleteView, LoginRequiredMixin):  # Done.
+class DeleteCommentView(DeleteView, LoginRequiredMixin, SuccessMessageMixin):  # Done.
     model = Comment
+    
 
     def get_success_url(self, **kwargs):  # How to overwrite default get success url.
         post_id = self.object.post.id  # How to get post id for the further use to redirect by pk.                         
         return reverse('forum:post-detail', kwargs={'pk': post_id})
 
+    success_message = 'Deleted'
 
 def post_detail(request, pk):
     post = Post.objects.get(id=pk)

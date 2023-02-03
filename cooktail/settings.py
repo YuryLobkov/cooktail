@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!8*_#6n(zq1osw66^okh84fbvvm7n4zm%l+g@19)irkaoyk3=^'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'captcha',
-    'tinymce',
+    'ckeditor',
 ]
 
 AUTH_USER_MODEL = 'forum.CustomUser'
@@ -172,3 +172,16 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 8000
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+         'height': 300,
+         'width': 600,
+    },
+    'comment_section': {
+        'toolbar': 'Full',
+        'height': 150,
+        'width': 400,
+    }
+}

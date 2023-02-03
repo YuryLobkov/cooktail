@@ -7,6 +7,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from ckeditor.widgets import CKEditorWidget
+
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(help_text='Required. Enter a valid email adress.', required=True)
@@ -22,7 +24,8 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
@@ -35,8 +38,7 @@ class UserLoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class':'form-control',
                'placeholder':'Password'}))
-    
-    # captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
@@ -74,15 +76,23 @@ class PasswordResetForm(PasswordResetForm):
 
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())    
 
+
 class PostForm(forms.ModelForm):
+
     class Meta:
         model = Post
         fields = ['title', 'content']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['content'].widget.attrs.update({'class': 'form-control'})
+
 class CommentForm(forms.ModelForm):
+    body = CKEditorWidget(config_name='comment_section')
+
     class Meta:
         model = Comment
         fields = ['body']
-    helper = FormHelper()
-    helper.form_class = 'form-group'
-    helper.layout = Layout(Field('body',css_class='form-control mt-2 mb-3'))
+        

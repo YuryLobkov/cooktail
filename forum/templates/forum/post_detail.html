@@ -1,5 +1,5 @@
-{% extends 'forum/base.html' %}
-{% block title %}Create post{% endblock title %}
+{% extends 'base.html' %}
+{% block title %}{{object.title}}{% endblock title %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container glass-layout">
@@ -15,8 +15,15 @@
         </div>
             {% if user == object.author %}
                 <div class="card-footer">
-                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'forum:update-post' object.id %}">Update</a>
-                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'forum:delete-post' object.id %}">Delete</a>
+                    <span>
+                        <div class="btn-group">
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" style="height: 30;" href="{% url 'forum:update-post' object.id %}">Update</a>
+                            <form class="mt-1" action="{% url 'forum:delete-post' object.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm " style="height: 30">Delete</button>
+                            </form>
+                        </div>
+                    </span>
                 </div> 
             {% endif %}
     </div>   
@@ -31,7 +38,8 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label style="width:max-content" for="{{ form.body.id_for_label }}">{{ comment_form | crispy}}</label>   
+                    {{ comment_form.as_p }}
+                    {{ comment_form.media }}
                     <button class="btn btn-secondary" type="submit">Add comment</button>
                 </div>
             </form>
@@ -51,8 +59,15 @@
                                 <img class="rounded-circle" style="width: 45px; height: 40px;" src="{{comment.comment_author.image.url}}"><strong class=""> {{ comment.comment_author }} </strong>
                                 <small> | {{ comment.post_date | date:"F d, P, Y" }}</small>
                                 {% if comment.comment_author.id == user.id %}
-                                    <small> <a style="text-decoration: none;" href="{% url 'forum:update-comment' comment.id %}">✏</a> </small>
-                                    <small> <a style="text-decoration: none;" href="{% url 'forum:delete-comment' comment.id %}">❌</a> </small>
+                                    <div class="btn-group mt-2">
+                                        <a style="text-decoration: none;" href="{% url 'forum:update-comment' comment.id %}">✏</a>
+                                            <form action="{% url 'forum:delete-comment' comment.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input style="background: transparent; border: none;" 
+                                                type="submit" value="❌">
+                                            </form>
+                                        </small>
+                                    </div>
                                 {% endif %}
                             </span>
                             <p class="mt-2">{{ comment.body|safe }}</p>

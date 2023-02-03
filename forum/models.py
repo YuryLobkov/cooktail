@@ -4,6 +4,7 @@ from django.utils import timezone
 import os
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth import get_user_model
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class CustomUser(AbstractUser):
@@ -21,7 +22,7 @@ class CustomUser(AbstractUser):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    content = models.CharField(max_length=1000)
+    content = RichTextField()
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -42,7 +43,7 @@ class Post(models.Model):
 class Comment(models.Model):
     comment_author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    body = models.CharField(max_length=500)
+    body = RichTextField(config_name = 'comment_section')
     post_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(auto_now=True)
 
