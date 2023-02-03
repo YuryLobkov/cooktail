@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UpdatePostView, CreateCommentView, UpdateCommentView, DeletePostView, DeleteCommentView
+from .views import UpdatePostView, UpdateCommentView, DeletePostView, DeleteCommentView
 
 app_name = 'forum'
 
@@ -10,7 +10,6 @@ urlpatterns = [
     path('create-post', views.create_post, name='create-post'),
     path('update-post/<int:pk>', UpdatePostView.as_view(), name='update-post'),
     path('post/<int:pk>/delete/', DeletePostView.as_view(), name = 'delete-post'),
-    path('create-comment/<int:pk>', CreateCommentView.as_view(), name='create-comment'),
     path('update-comment/<int:pk>', UpdateCommentView.as_view(), name='update-comment'),
     path('delete-comment/<int:pk>', DeleteCommentView.as_view(), name='delete-comment'),
     path('post/<int:pk>', views.post_detail, name='post-detail'),
