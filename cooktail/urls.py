@@ -18,11 +18,25 @@ from django.urls import path, include
 from .views import start_redirect_view
 from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls import handler404
+from forum.views import sign_up, custom_login, custom_logout, profile, \
+                        activate, password_change, password_reset, \
+                        password_reset_confirm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('drinks/', include('drinks.urls'), name='drinks'),
     path('', start_redirect_view, name='start_page'),
     path('forum/', include('forum.urls'), name='forum'),
-    path('', include('django.contrib.auth.urls'))
+    path('sign_up/', sign_up, name='sign-up'),
+    path('login/', custom_login, name='login'),
+    path('logout/', custom_logout, name='logout'),
+    path('profile/<username>', profile, name='profile'),
+    path('activate/<uidb64>/<token>', activate, name='activate'),
+    path('password_change', password_change, name='password_change'),
+    path('password_reset', password_reset, name='password_reset'),
+    path('reset/<uidb64>/<token>', password_reset_confirm, name='password_reset_confirm'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "forum.views.error_404"    

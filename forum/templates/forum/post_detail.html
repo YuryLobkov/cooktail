@@ -4,10 +4,14 @@
 {% block content %}
 <div class="container glass-layout">
     <div class="card">
-        <div class="card-header">{{object.author}} | {{object.created_at | date:"F d, Y" }}</div>
+        <div class="card-header">
+            <a style="text-decoration: blue;" href="{% url 'profile' user.username %}">
+                <img class="rounded-circle" style="width: 50px; height: 40px;" src="{{object.author.image.url}}"> {{object.author}} | {{object.created_at | date:"F d, Y" }} at {{object.created_at | date:"H:i" }}
+            </a>
+        </div>
         <div class="card-body">
             <h5 class="card-title">{{object.title}}</h5>
-            <p class="card-text">{{object.content}}</p>
+            <p class="card-text">{{object.content|safe}}</p>
         </div>
             {% if user == object.author %}
                 <div class="card-footer">
@@ -44,14 +48,14 @@
                     <li>           
                         <div>
                             <span>
-                                <strong class="">{{ comment.comment_author }} </strong>
+                                <img class="rounded-circle" style="width: 45px; height: 40px;" src="{{comment.comment_author.image.url}}"><strong class=""> {{ comment.comment_author }} </strong>
                                 <small> | {{ comment.post_date | date:"F d, P, Y" }}</small>
                                 {% if comment.comment_author.id == user.id %}
                                     <small> <a style="text-decoration: none;" href="{% url 'forum:update-comment' comment.id %}">✏</a> </small>
                                     <small> <a style="text-decoration: none;" href="{% url 'forum:delete-comment' comment.id %}">❌</a> </small>
                                 {% endif %}
                             </span>
-                            <p>{{ comment.body|safe }}</p>
+                            <p class="mt-2">{{ comment.body|safe }}</p>
                         </div>
                     </li>
                 {% endfor %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container glass-layout">
+    <h1 class='text-light centered'>My inventory</h1>
+    <h5 class="text-light">Here you can add all the stuff you own in your bar</h5>
+    <p class="text-light">After you put them in your list, only recepies required tools you have enough for will be shown in "Shaker!"</p>
+    
+    <div class="container">
+        <form class="row g-3" method="POST">{% csrf_token %}
+            <div class="col-auto">
+                {{form_tools}}
+            </div>
+            <div class="col-auto">
+                <input class="btn btn-success mb-3" value="Add" type="submit">
+            </div>
+        </form>
+    </div>
+    
+    <ul>
+        {% for item in usertools_list %}
+            <div class="btn btn-secondary m-1 p-0 list-unstyled d-inline-flex">
+                <li class="badge text-wrap mx-auto d-flex align-items-center" style="height: 2rem">
+                    {{item.user_inventory}}
+                </li>
+                <form  class="my-0" method="POST" action="{% url 'drinks:tool_delete' item.id %}">
+                    {% csrf_token %}
+                    <input class="btn btn-danger px-3 py-1" type="submit" value="X">
+                </form>
+            </div>
+            
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

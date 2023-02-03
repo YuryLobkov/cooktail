@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {%block content%}
 <div class="container glass-layout">
-    <div class="list-menu">
-        <h1>Cocktails</h1>
-        <a class="btn btn-primary bg-secondary" href="{% url 'drinks:add_cocktail' %}">Add</a>
+    <div class="list-menu centered">
+        <h1 class='text-center font-weight-bold'>Cocktails</h1>
+        <a class="btn btn-secondary mx-auto" href="{% url 'drinks:add_cocktail' %}">Add new cocktail</a>
     </div>
 </div>
 <div class="container glass-layout grid-wrap">
         {% for cocktail in cocktail_list %}
-            <div class="card mb-3" style="max-width: 540px;">
+            <div class="card mb-3 card-cocktail" style="max-width: 540px;">
                 <div class="row g-0 card-img-custom">
                 <div class="col-md-4 card-img-custom2">
                     <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk" width="100%">

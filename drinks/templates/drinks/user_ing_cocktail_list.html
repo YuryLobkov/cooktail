@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{%block content%}
+{% if cocktail_list.by_all %}
+    <div class="container glass-layout">
+        <div class="list-menu">
+            <h1 class=''>This is what u can make right now!</h1>
+        </div>
+    </div>
+    <div class="container glass-layout grid-wrap">
+            {% for cocktail in cocktail_list.by_all %}
+                <div class="card mb-3 card-cocktail" style="max-width: 540px;">
+                    <div class="row g-0 card-img-custom">
+                    <div class="col-md-4 card-img-custom2">
+                        <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk" width="100%">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                        <h5 class="card-title">{{cocktail.name}}</h5>
+                        <p class="card-text">{{cocktail.recepie}}</p>
+                        <p class="card-text"><small class="text-muted">
+                            {% for ingredient in cocktail.main_ingredients.all %}
+                                {{ingredient}}
+                            {% endfor %} <br>
+                        <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
+                        </small></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% endif %}
+{% if cocktail_list.missing_opt_ings %}
+    <div class="container glass-layout">
+        <div class="list-menu">
+            <h1 class=''>This is what you almost can make</h1>
+            <h3>If you find someware:
+                {% for opt_ingredient in cocktail_list.missing_opt_ings_total_by_cocktails %}
+                    {{opt_ingredient}}
+                {% endfor %}
+                <br>
+                {% for missing_tool in cocktail_list.missing_tools %}
+                    {{missing_tool}}
+                {% endfor %}
+            </h3>
+        </div>
+    </div>
+    <div class="container glass-layout grid-wrap">
+        {% for cocktail in cocktail_list.by_main %}
+                <div class="card mb-3 card-cocktail" style="max-width: 540px;">
+                    <div class="row g-0 card-img-custom">
+                    <div class="col-md-4 card-img-custom2">
+                        <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk" width="100%">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                        <h5 class="card-title">{{cocktail.name}}</h5>
+                        <p class="card-text">{{cocktail.recepie}}</p>
+                        <p class="card-text"><small class="text-muted">
+                            Missing ingredients:
+                            {% for ingredient in cocktail.optional_ingredients.all %}
+                                {% if ingredient in cocktail_list.missing_opt_ings %}
+                                    {{ingredient}}
+                                {% endif %}
+                            {% endfor %} <br>
+                        <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
+                        </small></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for cocktail in cocktail_list.by_tools %}
+                <div class="card mb-3 card-cocktail" style="max-width: 540px;">
+                    <div class="row g-0 card-img-custom">
+                    <div class="col-md-4 card-img-custom2">
+                        <img src="{{ cocktail.image.url }}" class="img-fluid rounded-start" alt="image is drunk" width="100%">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                        <h5 class="card-title">{{cocktail.name}}</h5>
+                        <p class="card-text">{{cocktail.recepie}}</p>
+                        <p class="card-text"><small class="text-muted">
+                            Missing tools:
+                            {% for tool in cocktail.tools.all %}
+                                {% if tool in cocktail_list.missing_tools %}
+                                    {{tool}}
+                                {% endif %}
+                            {% endfor %} <br>
+
+                            {% for cocktail_ing in cocktail.optional_ingredients.all %}
+                                {% if cocktail_ing in cocktail_list.missing_opt_ings %}
+                                Missing ingredients:
+
+                                {% comment %} 'Break' loop below {% endcomment %}
+                                {{ "<!--" }}
+                                {% else %}
+                                {{ "<!--" }}        
+                                {% endif %}                            
+                            {% endfor %}
+                            {{ "-->" }}
+
+
+                            {% for ingredient in cocktail.optional_ingredients.all %}
+                                {% if ingredient in cocktail_list.missing_opt_ings %}
+                                    {{ingredient }}
+                                {% endif %}
+                            {% endfor %}
+                             <br>
+                        <a href='/drinks/cocktail/{{cocktail.id}}' class="card-link">Show more</a>
+                        </small></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% else %}
+    <div class="container glass-layout">
+        <div class="list-menu">
+            <h4 class='text-center font-weight-bold'>Looks like you don`t have enough stuff to make something. 
+                Try to add some <a class="" href="{% url 'drinks:user_storage' %}">ingredients</a> or
+                <a class="" href="{% url 'drinks:user_tools' %}">tools</a>
+            </h4>
+        </div>
+    </div>
+{% endif %}
+{%endblock%}
