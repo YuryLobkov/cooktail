@@ -37,18 +37,10 @@ class DrinksDetails(DetailView):
     model = Cocktail
 
 
-class IngredientsList(ListView):
-    model = Ingredients
-
-
 class IngredientsCreate( LoginRequiredMixin, CreateView):
     model = Ingredients
     form_class = CreateIng
     success_url = reverse_lazy('drinks:add_cocktail')
-
-
-class InventoryList(ListView):
-    model = Inventory
 
 
 class InventoryCreate(LoginRequiredMixin, CreateView):
