@@ -1,12 +1,13 @@
-{% extends 'forum/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Update post{% endblock title %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container-fluid">
+<div class="container d-flex justify-content-center text-white">
     <form action="" method="post">
         {% csrf_token %}
         <h1>UPDATE POST PAGE</h1>
         {{form|crispy}}
+        {{form.media}}
         <button class="btn btn-success" type="submit">Update</button>
         <a href="{% url 'forum:post-detail' object.id %}" class="btn btn-secondary">Back to post</a>
     </form>
