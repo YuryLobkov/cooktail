@@ -22,6 +22,14 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            style_data = {
+                'class': 'form-control',
+            }
+            self.fields[str(field)].widget.attrs.update(style_data)
 
 
 class UserLoginForm(AuthenticationForm):

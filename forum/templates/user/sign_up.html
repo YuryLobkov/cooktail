@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}Sign Up{% endblock title %}
-{% load crispy_forms_tags %}
 {% block content %}
 </br>
 <div class="container-sm">
@@ -13,31 +12,12 @@
                             {% csrf_token %}
                             <div class="card-body">
                                 <h2 class="text-uppercase text-center">Create an account</h2>
-
                                 <div class="form-outline mb-4">
-                                    {{ form.username|as_crispy_field }}    
+                                    {{form.as_p}}
                                 </div>
-
-                                <div class="form-outline mb-4">
-                                    {{ form.email|as_crispy_field }}
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    {{ form.password1|as_crispy_field }}
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    {{ form.password2|as_crispy_field }}    
-                                </div>
-
-                                <div class="d-flex justify-content-center mb-4">
-                                    {{ form.captcha}}    
-                                </div>
-
                                 <div class="d-flex justify-content-center">
                                     <button  name="myButton" value="Submit" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Sign-up</button>
                                 </div>
-                                
                             </div>
                         </form>
 
