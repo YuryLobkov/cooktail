@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
+                                      SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
@@ -76,11 +77,24 @@ class PasswordChangeForm(SetPasswordForm):
         model = get_user_model()
         fields = ['new_password1', 'new_password2']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            style_data = {
+                'class': 'form-control',
+            }
+            self.fields[str(field)].widget.attrs.update(style_data)
+
+
 class PasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs = {'class':'form-control'})  
+    )
+
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
 
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())    
+    #captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())    
 
 
 class PostForm(forms.ModelForm):
@@ -89,11 +103,11 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control'})
+        }
 
-        self.fields['title'].widget.attrs.update({'class': 'form-control'})
-        self.fields['content'].widget.attrs.update({'class': 'form-control'})
+
 
 class CommentForm(forms.ModelForm):
     body = CKEditorWidget(config_name='comment_section')

@@ -25,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -182,6 +182,7 @@ CKEDITOR_CONFIGS = {
     'comment_section': {
         'toolbar': 'Full',
         'height': 150,
-        'width': 400,
+        'resize': '100%',
+        'resize_dir': 'both'
     }
 }

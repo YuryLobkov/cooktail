@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}CookTail - Update post{% endblock title %}
-{% load crispy_forms_tags %}
 {% block content %}
-<div class="container d-flex justify-content-center text-white">
+
+<div class="container d-flex justify-content-center text-white mt-3">
     <form action="" method="post">
         {% csrf_token %}
-        <h1>UPDATE POST PAGE</h1>
-        {{form|crispy}}
+        {{form.as_p}}
         {{form.media}}
         <button class="btn btn-success" type="submit">Update</button>
         <a href="{% url 'forum:post-detail' object.id %}" class="btn btn-secondary">Back to post</a>
     </form>
 </div>
+
 {% endblock content %}
