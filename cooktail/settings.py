@@ -180,6 +180,7 @@ CKEDITOR_CONFIGS = {
     'comment_section': {
         'toolbar': 'Full',
         'height': 150,
-        'width': 400,
+        'resize': '100%',
+        'resize_dir': 'both'
     }
 }

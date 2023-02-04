@@ -23,10 +23,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import get_user_model
+from django.http import Http404
 from .forms import UserLoginForm
 from django.contrib import messages
 from django.template import Context
 from .decorators import user_is_not_authenticated
+from .mixins import IsPostAuthorMixin, IsCommentAuthorMixin
 
 # Create your views here.
 def activate(request, uidb64, token):
@@ -89,6 +91,7 @@ def sign_up(request):
     else:
         form = RegistrationForm()
     return render(request, 'user/sign_up.html', context={'form':form})
+
 
 @login_required
 def password_change(request):
@@ -227,22 +230,22 @@ def create_post(request):
     return render(request, 'forum/create_post.html', {'form':form})
 
 
-class UpdatePostView(UpdateView, LoginRequiredMixin):  # Done.
+class UpdatePostView(LoginRequiredMixin, IsPostAuthorMixin, UpdateView):  # Done.
     model = Post
+    form_class = PostForm
     template_name = 'forum/update_post.html'
-    fields = ['title', 'content']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class DeletePostView(DeleteView, LoginRequiredMixin):  # Done.
+class DeletePostView(LoginRequiredMixin, DeleteView):  # Done.
     model = Post
     success_url = '/forum/posts'
 
 
-class UpdateCommentView(UpdateView, LoginRequiredMixin):  # Done.
+class UpdateCommentView(LoginRequiredMixin, IsCommentAuthorMixin, UpdateView):  # Done.
     model = Comment
     template_name = 'forum/update_comment.html'
     fields = ['body']
@@ -250,9 +253,10 @@ class UpdateCommentView(UpdateView, LoginRequiredMixin):  # Done.
     def get_success_url(self, **kwargs):   # How to overwrite default get success url.
         post_id = self.object.post.id  # How to get post id for the further use to redirect by pk.                           
         return reverse('forum:post-detail', kwargs={'pk': post_id})
+    
 
 
-class DeleteCommentView(DeleteView, LoginRequiredMixin, SuccessMessageMixin):  # Done.
+class DeleteCommentView(LoginRequiredMixin, DeleteView, SuccessMessageMixin):  # Done.
     model = Comment
     
 
@@ -261,6 +265,7 @@ class DeleteCommentView(DeleteView, LoginRequiredMixin, SuccessMessageMixin):  #
         return reverse('forum:post-detail', kwargs={'pk': post_id})
 
     success_message = 'Deleted'
+
 
 def post_detail(request, pk):
     post = Post.objects.get(id=pk)
