@@ -22,9 +22,11 @@ from django.conf.urls import handler404
 from forum.views import sign_up, custom_login, custom_logout, profile, \
                         activate, password_change, password_reset, \
                         password_reset_confirm
+import os
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(str(os.getenv('ADMIN_URL')), admin.site.urls),
     path('drinks/', include('drinks.urls'), name='drinks'),
     path('', start_redirect_view, name='start_page'),
     path('forum/', include('forum.urls'), name='forum'),

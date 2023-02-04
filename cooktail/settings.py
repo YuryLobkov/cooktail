@@ -22,12 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'RaccoonEnot.pythonanywhere.com']
 
 
 # Application definition
@@ -158,7 +162,7 @@ RECAPTCHA_PUBLIC_KEY = str(os.getenv('RECAPTCHA_PUBLIC_KEY'))
 
 RECAPTCHA_PRIVATE_KEY = str(os.getenv('RECAPTCHA_PRIVATE_KEY'))
 
-SILENCED_SYSTEM_CHECKS = os.getenv('SILENCED_SYSTEM_CHECKS')
+# SILENCED_SYSTEM_CHECKS = os.getenv('SILENCED_SYSTEM_CHECKS')
 
 #EMAIL SETTINGS
 load_dotenv() 
