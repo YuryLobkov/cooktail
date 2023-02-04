@@ -10,7 +10,7 @@ from ckeditor.widgets import CKEditorWidget
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(help_text='Required. Enter a valid email adress.', required=True)
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+    #captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
     class Meta:
         model = get_user_model()
