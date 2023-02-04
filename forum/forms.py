@@ -77,8 +77,20 @@ class PasswordChangeForm(SetPasswordForm):
         model = get_user_model()
         fields = ['new_password1', 'new_password2']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            style_data = {
+                'class': 'form-control',
+            }
+            self.fields[str(field)].widget.attrs.update(style_data)
+
 
 class PasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs = {'class':'form-control'})  
+    )
+
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
 
