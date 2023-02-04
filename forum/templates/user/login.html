@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock title %}
-{% load crispy_forms_tags %}
 {% block content %}
 </br>
 <div class="container-sm">
@@ -14,12 +13,12 @@
                             <div class="card-body">
                                 <h2 class="text-uppercase text-center">Login</h2>
 
-                                <div class="form-outline mb-4">
-                                    {{ form.username|as_crispy_field }}    
+                                <div class="form-outline mb-4 mt-5">
+                                    {{ form.username }}    
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    {{ form.password|as_crispy_field }}
+                                    {{ form.password }}
                                     <a  href="{% url 'password_reset' %}"> Forgot a password?</a>
                                 </div>
 
