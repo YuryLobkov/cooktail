@@ -64,6 +64,9 @@ class Cocktail(models.Model):
     tools = models.ManyToManyField(Inventory, related_name='tools')
     recepie = models.CharField(max_length=1000, default='Recepie here')
     image = models.ImageField(null=True, upload_to=path_and_rename, blank=True, default='default.jpg')
+    user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now=True)
+
 
 
     def __str__(self):
