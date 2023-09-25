@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',
     'ckeditor',
+    'api',
+    'rest-framework',
 ]
 
 AUTH_USER_MODEL = 'forum.CustomUser'

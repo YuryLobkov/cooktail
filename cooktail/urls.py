@@ -39,6 +39,9 @@ urlpatterns = [
     path('password_reset', password_reset, name='password_reset'),
     path('reset/<uidb64>/<token>', password_reset_confirm, name='password_reset_confirm'),
 
+    #API
+    path('api/', include('api.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = "forum.views.error_404"    
