@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .serializers import DrinkSerializer
+from drinks.models import Cocktail
 
-# Create your views here.
+class Drinks(generics.ListAPIView):
+    serializer_class = DrinkSerializer
+
+    def get_queryset(self):
+        return Cocktail.objects.all()
