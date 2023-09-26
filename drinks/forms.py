@@ -27,7 +27,7 @@ class CreateInventory(forms.ModelForm):
 class CreateCocktail(forms.ModelForm):
     class Meta:
         model = Cocktail
-        fields = '__all__'
+        fields = ['name','group','volume','main_ingredients','optional_ingredients','tools','recepie','image']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'group': forms.Select(attrs={'class': 'form-control'}),
