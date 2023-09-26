@@ -6,4 +6,4 @@ class Drinks(generics.ListAPIView):
     serializer_class = DrinkSerializer
 
     def get_queryset(self):
-        return Cocktail.objects.all()
+        return Cocktail.objects.prefetch_related('main_ingredients', 'optional_ingredients', 'group', 'tools')
