@@ -35,19 +35,19 @@ class DrinkCreateSerializer(serializers.ModelSerializer):
     date_posted = serializers.ReadOnlyField()
     group = serializers.PrimaryKeyRelatedField(
         many=False, queryset=GroupsCocktail.objects.all())
-    main_ingredients = IngredientSerializer  # (many=True)
-    optional_ingredients = IngredientSerializer  # (many=True)
-    tools = ToolSerializer  # (many=True)
+    main_ingredients = IngredientSerializer
+    optional_ingredients = IngredientSerializer
+    tools = ToolSerializer
 
     class Meta:
         model = Cocktail
         fields = ['id', 'name', 'group', 'volume', 'main_ingredients',
-                  'optional_ingredients', 'tools', 'recepie', 'image', 'user_id', 'date_posted']
+                  'optional_ingredients', 'tools', 'recepie', 'image', 'date_posted']
 
     def create(self, validated_data):
-        print(validated_data)
         if validated_data['image'] is None:
             validated_data['image'] = 'default.jpg'
+        validated_data['user_id'] = self.context['request'].user
 
         main_ing_data = validated_data.pop('main_ingredients')
         opt_ing_data = validated_data.pop('optional_ingredients')
