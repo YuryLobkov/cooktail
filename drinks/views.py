@@ -12,6 +12,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Q
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 # Create your views here.
 
@@ -38,9 +39,21 @@ class DrinksCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DrinksDelete(DeleteView):
+class DrinksDelete(LoginRequiredMixin, DeleteView):
     model = Cocktail
     success_url = reverse_lazy('drinks:cocktail_list')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        print(self.object.user_id)
+        form = self.get_form()
+        #check for permissions to delete
+        if form.is_valid() and (self.request.user == self.object.user_id or self.request.user.is_superuser):
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'You can not delete this\nCheck your right permissions')
+            return self.form_invalid(form)
+            
 
 
 class DrinksDetails(DetailView):
