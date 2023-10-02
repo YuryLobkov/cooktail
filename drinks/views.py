@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import (TemplateView, ListView, 
@@ -26,6 +27,15 @@ class DrinksCreate(LoginRequiredMixin, CreateView):
     model = Cocktail
     form_class = CreateCocktail
     success_url = reverse_lazy('drinks:cocktail_list')
+    
+    # adding active user id for created drink
+    def get_context_data(self, **kwargs):
+        kwargs['latest_posts_list'] = Cocktail.objects.order_by('-id')
+        return super(DrinksCreate, self).get_context_data(**kwargs)
+    
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user
+        return super().form_valid(form)
 
 
 class DrinksDelete(DeleteView):
